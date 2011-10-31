@@ -9,7 +9,7 @@ namespace BFAdmin.Helpers
 {
     public class SocketTools
     {
-        private static int clientSequenceNr = 0;
+        private static uint clientSequenceNr = 0;
 
         public static string generatePasswordHash(string salt, string password)
         {
@@ -39,14 +39,25 @@ namespace BFAdmin.Helpers
             return str.ToUpper();
         }
 
-        public static Byte[] EncodeClientRequest(string[] words)
+        public static Byte[] EncodeClientRequest(string[] words, uint sequence)
         {
-            Byte[] packet = EncodePacket(false, false, clientSequenceNr, words);
-            clientSequenceNr = (clientSequenceNr + 1) & 0x3FFFFFFF;
+            Byte[] packet;
+
+            if (sequence == 0)
+            {
+                Program.sequenceTracker.Add(clientSequenceNr, words[0]);
+
+                packet = EncodePacket(false, false, clientSequenceNr, words);
+                clientSequenceNr = (clientSequenceNr + 1) & 0x3FFFFFFF;
+            }
+            else
+            {
+                packet = EncodePacket(false, false, sequence, words);
+            }
             return packet;
         }
 
-        public static Byte[] EncodePacket(bool isFromServer, bool isResponse, int sequence, string[] words)
+        public static Byte[] EncodePacket(bool isFromServer, bool isResponse, uint sequence, string[] words)
         {
             Byte[] encodedHeader = EncodeHeader(isFromServer, isResponse, sequence);
             Byte[] encodedNumWords = EncodeInt32((uint)words.Length);
@@ -87,7 +98,7 @@ namespace BFAdmin.Helpers
             return result;
         }
 
-        public static Byte[] EncodeHeader(bool isFromServer, bool isResponse, int sequence)
+        public static Byte[] EncodeHeader(bool isFromServer, bool isResponse, uint sequence)
         {
             uint header = (uint)sequence & 0x3FFFFFFF;
             if (isFromServer)

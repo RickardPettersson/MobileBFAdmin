@@ -13,9 +13,9 @@ namespace BFAdmin
     class Program
     {
         // Server settings
-        private static string serverIP = "178.236.68.211";
+        private static string serverIP = "XXXX";
         private static int serverPort = 47200;
-        private static string serverPassword = "jolt";
+        private static string serverPassword = "XXXX";
 
         // Socket connection object
         private static Socket rconSocket;
@@ -26,9 +26,12 @@ namespace BFAdmin
         // Boolean to see if we can write or not to the socket
         private static Boolean canWrite = false;
         
+        // Sequence tracker
+        public static Dictionary<uint, string> sequenceTracker = new Dictionary<uint, string>();
+
         static void Main(string[] args)
         {
-            Log.Write("RCON Socket connecting...");
+            Log.Info("RCON Socket connecting...");
             try
             {
                 // Try convert server ip string to a IPAdress object
@@ -54,21 +57,21 @@ namespace BFAdmin
             }
             catch (ArgumentOutOfRangeException ex)
             {
-                Log.Write("Connect error: Port Fail - Exception: " + ex.ToString());
+                Log.Error("Connect error: Port Fail - Exception: " + ex.ToString());
                 CloseSocketConnection();
                 Console.ReadLine();
                 return;
             }
             catch (ObjectDisposedException ex)
             {
-                Log.Write("Connect error: Socket Closed - Exception: " + ex.ToString());
+                Log.Error("Connect error: Socket Closed - Exception: " + ex.ToString());
                 CloseSocketConnection();
                 Console.ReadLine();
                 return;
             }
             catch (Exception ex)
             {
-                Log.Write("Connect error - Exception: " + ex.ToString());
+                Log.Error("Connect error - Exception: " + ex.ToString());
                 CloseSocketConnection();
                 Console.ReadLine();
                 return;
@@ -76,7 +79,7 @@ namespace BFAdmin
 
             if (!rconSocket.Connected)
             {
-                Log.Write("Connect failed");
+                Log.Error("Connect failed");
                 Console.ReadLine();
                 return;
             }
@@ -101,7 +104,7 @@ namespace BFAdmin
 
         private static void ReadSocket()
         {
-            Log.Write("Started read socket");
+            Log.Info("Started read socket");
             while (true)
             {
                 if (!rconSocket.Connected)
@@ -116,19 +119,19 @@ namespace BFAdmin
                 }
                 catch (ArgumentOutOfRangeException ex)
                 {
-                    Log.Write("ReadSocket > DecodePacket - buffer too small - Exception: " + ex.ToString());
+                    Log.Error("ReadSocket > DecodePacket - buffer too small - Exception: " + ex.ToString());
                     Disconnect();
                     break;
                 }
                 catch (ObjectDisposedException ex)
                 {
-                    Log.Write("ReadSocket > DecodePacket - Socket Closed - Exception: " + ex.ToString());
+                    Log.Error("ReadSocket > DecodePacket - Socket Closed - Exception: " + ex.ToString());
                     Disconnect();
                     break;
                 }
                 catch (Exception ex)
                 {
-                    Log.Write("ReadSocket > DecodePacket - Exception: " + ex.ToString());
+                    Log.Error("ReadSocket > DecodePacket - Exception: " + ex.ToString());
                     Disconnect();
                     break;
                 }
@@ -143,7 +146,7 @@ namespace BFAdmin
                             break;
                         }
 
-                        Log.Write("Connected");
+                        Log.Info("Connected");
 
                         string[] sendStrings = { "login.hashed", SocketTools.generatePasswordHash(packetParts.Words[1], serverPassword) };
                         SendToSocket(sendStrings);
@@ -152,7 +155,7 @@ namespace BFAdmin
                     {
                         if ((packetParts.Words.Count > 0) && (packetParts.Words[0] != "OK"))
                         {
-                            Log.Write("Auth Failed");
+                            Log.Error("Auth Failed");
                             Disconnect();
                             break;
                         }
@@ -161,7 +164,7 @@ namespace BFAdmin
                         SendToSocket(sendStrings);
 
                         canWrite = true;
-                        Log.Write("Authenticated");
+                        Log.Info("Authenticated");
                     }
                     else if (packetParts.sequence == 1)
                     {
@@ -173,9 +176,7 @@ namespace BFAdmin
                     }
                 }
 
-                List<string> w = packetParts.Words;
-
-                ServerEventHandler.HandleEvents(w);
+                ServerEventHandler.HandleEvents(packetParts);
             }
         }
         
@@ -183,13 +184,29 @@ namespace BFAdmin
         {
             String[] stringArray = new String[] { word };
 
-            SendToSocket(stringArray);
+            SendToSocket(stringArray, 0);
+        }
+
+        public static void SendToSocket(string word, uint sequence)
+        {
+            String[] stringArray = new String[] { word };
+
+            SendToSocket(stringArray, sequence);
         }
 
         public static void SendToSocket(string[] words)
         {
-            Log.Write("Sent command to socket: " + string.Join(" ", words));
-            rconSocket.Send(SocketTools.EncodeClientRequest(words));
+            SendToSocket(words, 0);
+        }
+
+        public static void SendToSocket(string[] words, uint sequence)
+        {
+            /*if (words[0] != "OK")
+            {*/
+            Log.Info("Sent command to socket: " + string.Join(" ", words) + " - Sequence: " + sequence);
+            //}
+
+            rconSocket.Send(SocketTools.EncodeClientRequest(words, sequence));
         }
 
         private static Byte[] receivePacket()
@@ -225,7 +242,7 @@ namespace BFAdmin
 
         private static void Disconnect()
         {
-            Log.Write("Disconnected (ReadSocket)");
+            Log.Info("Disconnected (ReadSocket)");
             CloseSocketConnection();
             readThread.Abort();
         }
@@ -235,7 +252,5 @@ namespace BFAdmin
             rconSocket.Close();
             rconSocket = null;
         }
-
-       
     }
 }
