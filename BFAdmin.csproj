@@ -45,9 +45,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers\Log.cs" />
-    <Compile Include="Helpers\ServerEventHandler.cs" />
-    <Compile Include="Helpers\SocketTools.cs" />
-    <Compile Include="Models\packetData.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
