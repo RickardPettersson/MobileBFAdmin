@@ -6,22 +6,45 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Security.Cryptography;
-using BFAdmin.Models;
 using BFAdmin.Helpers;
+using System.Net.Battlefield3;
 namespace BFAdmin
 {
     class Program
     {
         // Server settings
-        private static string serverIP = "XXXXXX";
+        private static string serverIP = "178.236.68.211";
         private static int serverPort = 47200;
-        private static string serverPassword = "XXXXX";
+        private static string serverPassword = "jolt";
+
+        private static RconClient rconClient;
 
         static void Main(string[] args)
         {
             Log.Info("RCON Socket connecting...");
-            
 
+            rconClient = new RconClient();
+            rconClient.Address = serverIP;
+            rconClient.Port = serverPort;
+            rconClient.Connected += new EventHandler(rconClient_Connected);
+            rconClient.ConnectError += new EventHandler<ConnectErrorEventArgs>(rconClient_ConnectError);
+            rconClient.Disconnected += new EventHandler<DisconnectedEventArgs>(rconClient_Disconnected);
+            rconClient.LevelLoaded += new EventHandler<LevelLoadedEventArgs>(rconClient_LevelLoaded);
+            rconClient.LoggedOn += new EventHandler(rconClient_LoggedOn);
+            rconClient.PlayerAuthenticated += new EventHandler<PlayerAuthenticatedEventArgs>(rconClient_PlayerAuthenticated);
+            rconClient.PlayerChat += new EventHandler<PlayerChatEventArgs>(rconClient_PlayerChat);
+            rconClient.PlayerJoined += new EventHandler<PlayerEventArgs>(rconClient_PlayerJoined);
+            rconClient.PlayerJoining += new EventHandler<PlayerJoiningEventArgs>(rconClient_PlayerJoining);
+            rconClient.PlayerKilled += new EventHandler<PlayerKilledEventArgs>(rconClient_PlayerKilled);
+            rconClient.PlayerLeft += new EventHandler<PlayerEventArgs>(rconClient_PlayerLeft);
+            rconClient.PlayerMoved += new EventHandler<PlayerMovedEventArgs>(rconClient_PlayerMoved);
+            rconClient.PlayerSpawned += new EventHandler<PlayerEventArgs>(rconClient_PlayerSpawned);
+            rconClient.PunkBusterMessage += new EventHandler<PunkBusterMessageEventArgs>(rconClient_PunkBusterMessage);
+            rconClient.RawRead += new EventHandler<RawReadEventArgs>(rconClient_RawRead);
+            rconClient.Response += new EventHandler<ResponseEventArgs>(rconClient_Response);
+            rconClient.RoundOver += new EventHandler(rconClient_RoundOver);
+            rconClient.Connect();
+            
             string consoleText = string.Empty;
 
             while (true)
@@ -35,5 +58,97 @@ namespace BFAdmin
             }
         }
 
+        static void rconClient_RoundOver(object sender, EventArgs e)
+        {
+            Log.Info("RoundOver");
+        }
+
+        static void rconClient_Response(object sender, ResponseEventArgs e)
+        {
+            Log.Info("Response - ClientCommand: " + e.ClientCommand + " - Sequence: " + e.Sequence + " - " + string.Join(" :: ", e.Words.ToArray()));
+        }
+
+        static void rconClient_RawRead(object sender, RawReadEventArgs e)
+        {
+            //Log.Info("RawRead - IsFromServer: " + e.Packet.IsFromServer + " - IsResponse: " + e.Packet.IsResponse + " - Sequence: " + e.Packet.Sequence + " - Words: " + string.Join(" :: ", e.Packet.Words.ToArray()));
+        }
+
+        static void rconClient_PunkBusterMessage(object sender, PunkBusterMessageEventArgs e)
+        {
+            Log.Info("PunkBusterMessage - " + e.Message);
+        }
+
+        static void rconClient_PlayerSpawned(object sender, PlayerEventArgs e)
+        {
+            Log.Info("PlayerSpawned - Player: " + e.Player);
+        }
+
+        static void rconClient_PlayerMoved(object sender, PlayerMovedEventArgs e)
+        {
+            Log.Info("PlayerMoved - Player: " + e.Player.Name + " - New Team: " + e.NewTeam + " - New Squad: " + e.NewSquad + " - Old Team: " + e.OldTeam + " - Old Squad: " + e.OldSquad);
+        }
+
+        static void rconClient_PlayerLeft(object sender, PlayerEventArgs e)
+        {
+            Log.Info("PlayerLeft - Player: " + e.Player.Name);
+        }
+
+        static void rconClient_PlayerKilled(object sender, PlayerKilledEventArgs e)
+        {
+            Log.Info("PlayerKilled - Attacker: " + e.Attacker.Name + " - Victim: " + e.Victim.Name + " - Weapon: " + e.Weapon + " - Headshot: " + e.Headshot.ToString());
+        }
+
+        static void rconClient_PlayerJoined(object sender, PlayerEventArgs e)
+        {
+            Log.Info("PlayerJoined - Player: " + e.Player.Name);
+        }
+
+        static void rconClient_PlayerJoining(object sender, PlayerJoiningEventArgs e)
+        {
+            Log.Info("PlayerJoining - Player: " + e.Name + " - GUID: " + e.Guid);
+        }
+
+        static void rconClient_PlayerChat(object sender, PlayerChatEventArgs e)
+        {
+            Log.Info("PlayerChat - Source; " + e.Source + " - Player: " + e.Player.Name + " - Message: " + e.Message);
+        }
+
+        static void rconClient_PlayerAuthenticated(object sender, PlayerAuthenticatedEventArgs e)
+        {
+            if (e.Player != null)
+            {
+                Log.Info("PlayerAuthenticated - Player: " + e.Player.Name);
+            }
+            else
+            {
+                Log.Info("PlayerAuthenticated - Player: N/A");
+            }
+        }
+
+        static void rconClient_LoggedOn(object sender, EventArgs e)
+        {
+            Log.Info("RCON Client Logged On");
+        }
+
+        static void rconClient_LevelLoaded(object sender, LevelLoadedEventArgs e)
+        {
+            Log.Info("LevelLoaded - Level: " + e.Level + " - GameMode: " + e.GameMode + " - Round (" + e.RoundsPlayed + "/" + e.RoundsTotal + ")");
+        }
+
+        static void rconClient_Disconnected(object sender, DisconnectedEventArgs e)
+        {
+            Log.Info("Disconnected - Message: " + e.Message);
+        }
+
+        static void rconClient_ConnectError(object sender, ConnectErrorEventArgs e)
+        {
+            Log.Info("ConnectError - Message: " + e.Message);
+        }
+
+        static void rconClient_Connected(object sender, EventArgs e)
+        {
+            rconClient.LogOn(serverPassword, true);
+            Log.Info("Connected");
+        }
     }
 }
