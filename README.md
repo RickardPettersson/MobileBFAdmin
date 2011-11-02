@@ -1,14 +1,14 @@
 # Mobile Battlefield Server Interface
 
-I search for a mobile application for Android to control my Battlefield 3 game server and didnt find any so i now creating a webb app that can be used in both Android and iOS.
+The project is a application that you starting on a computer/server that connecting to your Battlefield 3 Server with RCON protocol, then you connecting with your smartphone browser to this application and get a mobile web app to control your server with.
 
-This is the dev repository so i can not guarantee its works good the latest code, its going to be releases when i feeling its stable.
+It´s a .Net application and i testing it on Windows but Mono could maybe work, dont know, try if you whant and report bugs i maybe can fix.
 
-## Server instalation
+## Technical stuff about the application
 
-You need to install a service that works both like a RCON client and a webservice.
+The application is coded in C# and .Net 4.0 with a .Net library called BF3RCON (http://bf3rcon.codeplex.com) that fix all the stuff with the RCON protocol.
 
-More information about installation comming later.
+Then i using the library called NLog (http://nlog-project.org) to log to textfile console log etc.
 
 ## Whant to help?
 
