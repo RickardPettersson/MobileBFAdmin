@@ -13,16 +13,14 @@ namespace BFAdmin
     class Program
     {
         // Server settings
-        private static string serverIP = "178.236.68.211";
+        private static string serverIP = "XXXXXX";
         private static int serverPort = 47200;
-        private static string serverPassword = "jolt";
+        private static string serverPassword = "XXXXX";
 
         private static RconClient rconClient;
 
         static void Main(string[] args)
         {
-            Log.Info("RCON Socket connecting...");
-
             rconClient = new RconClient();
             rconClient.Address = serverIP;
             rconClient.Port = serverPort;
