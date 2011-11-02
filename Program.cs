@@ -8,50 +8,71 @@ using System.Threading;
 using System.Security.Cryptography;
 using BFAdmin.Helpers;
 using System.Net.Battlefield3;
+using System.Timers;
 namespace BFAdmin
 {
     class Program
     {
         // Server settings
-        private static string serverIP = "XXXXXX";
-        private static int serverPort = 47200;
-        private static string serverPassword = "XXXXX";
+        private static string serverIP = string.Empty;
+        private static int serverPort = 0;
+        private static string serverPassword = string.Empty;
 
         private static RconClient rconClient;
+        private static System.Timers.Timer aTimer;
+
+        public static List<Player> Playerlist = new List<Player>();
 
         static void Main(string[] args)
         {
-            rconClient = new RconClient();
-            rconClient.Address = serverIP;
-            rconClient.Port = serverPort;
-            rconClient.Connected += new EventHandler(rconClient_Connected);
-            rconClient.ConnectError += new EventHandler<ConnectErrorEventArgs>(rconClient_ConnectError);
-            rconClient.Disconnected += new EventHandler<DisconnectedEventArgs>(rconClient_Disconnected);
-            rconClient.LevelLoaded += new EventHandler<LevelLoadedEventArgs>(rconClient_LevelLoaded);
-            rconClient.LoggedOn += new EventHandler(rconClient_LoggedOn);
-            rconClient.PlayerAuthenticated += new EventHandler<PlayerAuthenticatedEventArgs>(rconClient_PlayerAuthenticated);
-            rconClient.PlayerChat += new EventHandler<PlayerChatEventArgs>(rconClient_PlayerChat);
-            rconClient.PlayerJoined += new EventHandler<PlayerEventArgs>(rconClient_PlayerJoined);
-            rconClient.PlayerJoining += new EventHandler<PlayerJoiningEventArgs>(rconClient_PlayerJoining);
-            rconClient.PlayerKilled += new EventHandler<PlayerKilledEventArgs>(rconClient_PlayerKilled);
-            rconClient.PlayerLeft += new EventHandler<PlayerEventArgs>(rconClient_PlayerLeft);
-            rconClient.PlayerMoved += new EventHandler<PlayerMovedEventArgs>(rconClient_PlayerMoved);
-            rconClient.PlayerSpawned += new EventHandler<PlayerEventArgs>(rconClient_PlayerSpawned);
-            rconClient.PunkBusterMessage += new EventHandler<PunkBusterMessageEventArgs>(rconClient_PunkBusterMessage);
-            rconClient.RawRead += new EventHandler<RawReadEventArgs>(rconClient_RawRead);
-            rconClient.Response += new EventHandler<ResponseEventArgs>(rconClient_Response);
-            rconClient.RoundOver += new EventHandler(rconClient_RoundOver);
-            rconClient.Connect();
-            
-            string consoleText = string.Empty;
-
-            while (true)
+            if (string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["RCONServerIP"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["RCONServerPort"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["RCONServerPassword"]))
             {
-                consoleText = Console.ReadLine();
+                Console.WriteLine("Some settings in app.config is not set");
+                Console.WriteLine(">> Press any key to quit <<");
+                Console.ReadLine();
+            }
+            else
+            {
+                serverIP = System.Configuration.ConfigurationManager.AppSettings["RCONServerIP"];
+                serverPort = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["RCONServerPort"]);
+                serverPassword = System.Configuration.ConfigurationManager.AppSettings["RCONServerPassword"];
 
-                if (consoleText == "quit")
+                rconClient = new RconClient();
+                rconClient.Address = serverIP;
+                rconClient.Port = serverPort;
+                rconClient.Connected += new EventHandler(rconClient_Connected);
+                rconClient.ConnectError += new EventHandler<ConnectErrorEventArgs>(rconClient_ConnectError);
+                rconClient.Disconnected += new EventHandler<DisconnectedEventArgs>(rconClient_Disconnected);
+                rconClient.LevelLoaded += new EventHandler<LevelLoadedEventArgs>(rconClient_LevelLoaded);
+                rconClient.LoggedOn += new EventHandler(rconClient_LoggedOn);
+                rconClient.PlayerAuthenticated += new EventHandler<PlayerAuthenticatedEventArgs>(rconClient_PlayerAuthenticated);
+                rconClient.PlayerChat += new EventHandler<PlayerChatEventArgs>(rconClient_PlayerChat);
+                rconClient.PlayerJoined += new EventHandler<PlayerEventArgs>(rconClient_PlayerJoined);
+                rconClient.PlayerJoining += new EventHandler<PlayerJoiningEventArgs>(rconClient_PlayerJoining);
+                rconClient.PlayerKilled += new EventHandler<PlayerKilledEventArgs>(rconClient_PlayerKilled);
+                rconClient.PlayerLeft += new EventHandler<PlayerEventArgs>(rconClient_PlayerLeft);
+                rconClient.PlayerMoved += new EventHandler<PlayerMovedEventArgs>(rconClient_PlayerMoved);
+                rconClient.PlayerSpawned += new EventHandler<PlayerEventArgs>(rconClient_PlayerSpawned);
+                rconClient.PunkBusterMessage += new EventHandler<PunkBusterMessageEventArgs>(rconClient_PunkBusterMessage);
+                rconClient.RawRead += new EventHandler<RawReadEventArgs>(rconClient_RawRead);
+                rconClient.Response += new EventHandler<ResponseEventArgs>(rconClient_Response);
+                rconClient.RoundOver += new EventHandler(rconClient_RoundOver);
+                rconClient.Connect();
+
+                aTimer = new System.Timers.Timer(2000);
+                aTimer.Elapsed += new ElapsedEventHandler(ListPlayers);
+                aTimer.Enabled = true;
+
+                string consoleText = string.Empty;
+
+                while (true)
                 {
-                    break;
+                    consoleText = Console.ReadLine();
+
+                    if (consoleText == "quit")
+                    {
+                        break;
+                    }
                 }
             }
         }
@@ -147,6 +168,29 @@ namespace BFAdmin
         {
             rconClient.LogOn(serverPassword, true);
             Log.Info("Connected");
+        }
+
+        private static void ListPlayers(object source, ElapsedEventArgs e)
+        {
+            PlayerCollection players = rconClient.Players;
+            Playerlist = players.ToList();
+
+
+            if (players.Count == 0)
+            {
+                Log.Info("No players on the server");
+            }
+            else
+            {
+                Log.Info("Playerlist - Start");
+
+                foreach (Player player in players)
+                {
+                    Console.WriteLine(player.Name + " - TeamId: " + player.TeamId + " - SquadId: " + player.SquadId + " - Score: " + player.Score + " - Kills: " + player.Kills + " - Deaths: " + player.Deaths);
+                }
+
+                Log.Info("Playerlist - End");
+            }
         }
     }
 }
