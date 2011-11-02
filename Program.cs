@@ -17,6 +17,7 @@ namespace BFAdmin
         private static string serverIP = string.Empty;
         private static int serverPort = 0;
         private static string serverPassword = string.Empty;
+        private static int webservicePort = 0;
 
         private static RconClient rconClient;
         private static System.Timers.Timer aTimer;
@@ -25,7 +26,7 @@ namespace BFAdmin
 
         static void Main(string[] args)
         {
-            if (string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["RCONServerIP"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["RCONServerPort"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["RCONServerPassword"]))
+            if (string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["RCONServerIP"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["RCONServerPort"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["RCONServerPassword"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["WebservicePort"]))
             {
                 Console.WriteLine("Some settings in app.config is not set");
                 Console.WriteLine(">> Press any key to quit <<");
@@ -36,6 +37,7 @@ namespace BFAdmin
                 serverIP = System.Configuration.ConfigurationManager.AppSettings["RCONServerIP"];
                 serverPort = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["RCONServerPort"]);
                 serverPassword = System.Configuration.ConfigurationManager.AppSettings["RCONServerPassword"];
+                webservicePort = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["WebservicePort"]);
 
                 rconClient = new RconClient();
                 rconClient.Address = serverIP;
@@ -63,17 +65,15 @@ namespace BFAdmin
                 aTimer.Elapsed += new ElapsedEventHandler(ListPlayers);
                 aTimer.Enabled = true;
 
-                string consoleText = string.Empty;
+                Webservice.Start(webservicePort);
 
-                while (true)
+                Console.TreatControlCAsInput = false;  // Turn off the default system behavior when CTRL+C is pressed.
+                Console.CancelKeyPress += delegate(object sender, ConsoleCancelEventArgs eventArgs)
                 {
-                    consoleText = Console.ReadLine();
+                    Webservice.Stop();
+                };
 
-                    if (consoleText == "quit")
-                    {
-                        break;
-                    }
-                }
+                Console.ReadLine();
             }
         }
 
@@ -174,7 +174,6 @@ namespace BFAdmin
         {
             PlayerCollection players = rconClient.Players;
             Playerlist = players.ToList();
-
 
             if (players.Count == 0)
             {
