@@ -10,6 +10,18 @@ The application is coded in C# and .Net 4.0 with a .Net library called BF3RCON (
 
 Then i using the library called NLog (http://nlog-project.org) to log to textfile console log etc.
 
+## Setup the application
+
+In the application folder you have a file called app.config that are a text file with some settings, open it and edit to the settings you whant, here some explaination:
+* RCONServerIP = RCON server ip/host
+* RCONServerPort = RCON server port, default for BF3 is 47200
+* RCONServerPassword = RCON server password
+* WebservicePort = What port you whant the webservice to listen on, default port is 80 for web
+* WebserviceAdminUsername = Username to access the webinterface
+* WebserviceAdminPassword = Password to access the webinterface
+
+You need to run the application as administrator (right click on the .exe and then "Run as Administrator") so you have right to open webservice port.
+
 ## Whant to help?
 
 Create a fork and start adding features, i maybe missed or not done with.
