@@ -11,64 +11,22 @@ namespace BFAdmin.Helpers
 {
     public class WebserviceResponse
     {
+        // Create the answer and set default answer
         private string answer = "Page not found";
 
         public WebserviceResponse(WebserviceRequest myRequest)
         {
-            string id = string.Empty;
-
-            try
-            {
-                id = myRequest.Data["id"];
-            }
-            catch { }
-
             // TODO: Fix maybe stats function - Helpers.DB.AddStats(id, myRequest.RawRequest.RemoteEndPoint.ToString().Split(':')[0], myRequest.RawRequest.UserAgent, myRequest.URL, protocolVersion);
 
             // Try to find path
             if (new Regex("/$").Match(myRequest.URL).Success)
             {
+                // Create a stringbuilder to put the answer stuff in
                 StringBuilder sb = new StringBuilder();
-                /*sb.Append("<html><head><title>Battlefield 3 Server Admin</title>");
-                sb.Append("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" />");
-                sb.Append("<link rel=\"stylesheet\" href=\"http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.css\" />");
-                sb.Append("<script src=\"http://code.jquery.com/jquery-1.6.4.min.js\"></script>");
-                sb.Append("<script src=\"http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.js\"></script>");
-                sb.Append("<script src=\"https://raw.github.com/jblas/jquery-mobile-plugins/master/page-params/jqm.page.params.js\"></script>");
-                sb.Append("</head><body>");
-                sb.Append("<div data-role=\"page\" id=\"playerlist\">");
-                sb.Append("<div data-role=\"header\" data-theme=\"b\"><h1>BF3 Server Admin</h1></div>");
-                sb.Append("<div data-role=\"content\" id=\"one\">");
-                sb.Append("<h2>Playerlist</h2>");
-                sb.Append("<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"d\">");
-                if (Program.Playerlist.Count == 0)
-                {
-                    sb.Append("<li><a href=\"#\">No players on the serve    r</a></li>");
-                }
-                else
-                {
-                    foreach (var p in Program.Playerlist)
-                    {
-                        sb.Append("<li><a href=\"#playertodo\">" + p.Name + "</a></li>");
-                    }
-                }
-                sb.Append("</ul>");
-                sb.Append("</div>");
-                sb.Append("</div>");
-                sb.Append("<div data-role=\"page\" id=\"playertodo\">");
-                sb.Append("<div data-role=\"header\" data-theme=\"b\"><h1>BF3 Server Admin</h1></div>");
-                sb.Append("<div data-role=\"content\" id=\"one\">");
-                sb.Append("<h2>Do with player XXX</h2>");
-                sb.Append("<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"d\">");
-                sb.Append("<li><a href=\"#\">Kick</a></li>");
-                sb.Append("<li><a href=\"#\">Ban</a></li>");
-                sb.Append("</ul>");
-                sb.Append("</div>");
-                sb.Append("</div>");
-                sb.Append("</body></html>");
-                answer = sb.ToString();*/
+                
                 try
                 {
+                    // Read the html file in to a string
                     answer = File.ReadAllText("www/index.htm");
                 }
                 catch (Exception ex)
@@ -76,6 +34,7 @@ namespace BFAdmin.Helpers
                     string apa = string.Empty;
                 }
 
+                // Check if no players on the server
                 if (Program.Playerlist.Count == 0)
                 {
                     // /do?player=apa
@@ -83,21 +42,26 @@ namespace BFAdmin.Helpers
                 }
                 else
                 {
+                    // Loop each player in the player list 
                     foreach (var p in Program.Playerlist)
                     {
+                        // Add item to the list
                         sb.Append("<li><a href=\"/do?player=" + p.Name + "\">" + p.Name + "</a></li>");
                     }
                 }
 
+                // Add playerlist to the answer with some replace
                 answer = answer.Replace("<PLAYERLIST>", sb.ToString());
 
             }
             else if (new Regex("/do").Match(myRequest.URL).Success)
             {
+                // Get the html file to string and replace the text with the player name
                 answer = File.ReadAllText("www/do.htm").Replace("REPLACETHISWITHPLAYERNAME", myRequest.Data["player"]);
             }
             else if (new Regex("/command").Match(myRequest.URL).Success)
             {
+                // Check if some parameters/querystrings not there
                 if ((!myRequest.Data.Keys.Contains("player")) || (!myRequest.Data.Keys.Contains("do")))
                 {
                     answer = "ERROR";

@@ -7,6 +7,7 @@ namespace BFAdmin.Helpers
 {
     public class WebserviceRequest
     {
+        // Some objects to holding data for the request
         public string URL = string.Empty;
         public string RawData = string.Empty;
         public Dictionary<string, string> Data = new Dictionary<string, string>();

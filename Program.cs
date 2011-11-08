@@ -17,17 +17,25 @@ namespace BFAdmin
         private static string serverIP = string.Empty;
         private static int serverPort = 0;
         private static string serverPassword = string.Empty;
+        private static string webserviceHost = string.Empty;
         private static int webservicePort = 0;
 
+        // Create the rcon client object
         private static RconClient rconClient;
+
+        // Create a timer object
         private static System.Timers.Timer aTimer;
 
+        // Create a player list object
         public static List<Player> Playerlist = new List<Player>();
+
+        // Create a player command queue
         public static Queue<Dictionary<string, string>> PlayerCommandsQueue = new Queue<Dictionary<string, string>>();
 
         static void Main(string[] args)
         {
-            if (string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["RCONServerIP"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["RCONServerPort"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["RCONServerPassword"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["WebservicePort"]))
+            // Check if some settings not set in the app.config
+            if (string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["RCONServerIP"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["RCONServerPort"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["RCONServerPassword"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["WebservicePort"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["WebserviceAdminUsername"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["WebserviceAdminPassword"]) || string.IsNullOrEmpty(System.Configuration.ConfigurationManager.AppSettings["WebserviceHost"]))
             {
                 Console.WriteLine("Some settings in app.config is not set");
                 Console.WriteLine(">> Press any key to quit <<");
@@ -35,11 +43,14 @@ namespace BFAdmin
             }
             else
             {
+                // Get server settings from app.config
                 serverIP = System.Configuration.ConfigurationManager.AppSettings["RCONServerIP"];
                 serverPort = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["RCONServerPort"]);
                 serverPassword = System.Configuration.ConfigurationManager.AppSettings["RCONServerPassword"];
+                webserviceHost = System.Configuration.ConfigurationManager.AppSettings["WebserviceHost"];
                 webservicePort = Convert.ToInt32(System.Configuration.ConfigurationManager.AppSettings["WebservicePort"]);
 
+                // Setup the rcon client with events etc and connect
                 rconClient = new RconClient();
                 rconClient.Address = serverIP;
                 rconClient.Port = serverPort;
@@ -62,12 +73,15 @@ namespace BFAdmin
                 rconClient.RoundOver += new EventHandler(rconClient_RoundOver);
                 rconClient.Connect();
 
+                // Setup a timer for every 5 seconds to run the listplayers function that do stuff with the players, like commands etc.
                 aTimer = new System.Timers.Timer(5000);
                 aTimer.Elapsed += new ElapsedEventHandler(ListPlayers);
                 aTimer.Enabled = true;
 
-                Webservice.Start(webservicePort);
+                // Start the webservice/HTTP Listener to listen on webservice port
+                Webservice.Start(webserviceHost, webservicePort);
 
+                // Add some handling of ctrl+c so we stoping the webservice right
                 Console.TreatControlCAsInput = false;  // Turn off the default system behavior when CTRL+C is pressed.
                 Console.CancelKeyPress += delegate(object sender, ConsoleCancelEventArgs eventArgs)
                 {
@@ -171,9 +185,11 @@ namespace BFAdmin
 
         static void rconClient_Disconnected(object sender, DisconnectedEventArgs e)
         {
+            // Disable the timer that runs the playerlist
             aTimer.Enabled = false;
             aTimer.Dispose();
 
+            // Stop the webservice
             Webservice.Stop();
 
             Log.Info("Disconnected - Message: " + e.Message);
@@ -186,7 +202,9 @@ namespace BFAdmin
 
         static void rconClient_Connected(object sender, EventArgs e)
         {
+            // Send login command to the RCON server
             rconClient.LogOn(serverPassword, true);
+
             Log.Info("Connected");
         }
 
@@ -202,22 +220,28 @@ namespace BFAdmin
             if (players.Count == 0)
             {
                 Log.Info("No players on the server");
+
+                // If there is no players on the server then only check for players every 5 minutes
                 aTimer.Interval = 5 * 60 * 1000;
             }
             else
             {
+                // If there is players on the server then heck for players every 5 seconds
                 aTimer.Interval = 5000;
 
                 Log.Info(players.Count + " players on the server");
 
+                // Check if we got any player command in the queue
                 if (PlayerCommandsQueue.Count > 0)
                 {
                     do
                     {
+                        // Get the oldest object in the queue and remove it from the queue
                         Dictionary<string, string> command = PlayerCommandsQueue.Dequeue();
 
-
+                        // Create a player object
                         Player player;
+
                         try
                         {
                             // Get the player object from rcon library
@@ -259,14 +283,6 @@ namespace BFAdmin
                         }
                     } while (PlayerCommandsQueue.Count != 0);
                 }
-                /*Log.Info("Playerlist - Start");
-
-                foreach (Player player in players)
-                {
-                    Console.WriteLine(player.Name + " - TeamId: " + player.TeamId + " - SquadId: " + player.SquadId + " - Score: " + player.Score + " - Kills: " + player.Kills + " - Deaths: " + player.Deaths);
-                }
-
-                Log.Info("Playerlist - End");*/
             }
         }
     }
