@@ -4,40 +4,25 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.css" />
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
-        <script type="text/javascript" src="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.js"></script>
         <script type="text/javascript">
-            var PlayerName = "REPLACETHISWITHPLAYERNAME";
-
-            function Do(whatTodo) {
-                console.log("Player = " + PlayerName + " - Todo: " + whatTodo);
-
-                $.post(
-                    "/command",
-                    { player: PlayerName, do: whatTodo },
-                    function (responseText) {
-                        // TODO: maybe handle errors...
-                        document.location = "/";
-                    },
-                    "html"
-                ); 
-            }
-
-            $(document).ready(function () {
-                $('#playerName').html(PlayerName);
+            $(document).bind("mobileinit", function () {
+                $.mobile.ajaxEnabled = false;
+                //window.setTimeout('location.reload()', 10000);
             });
-        </script>
+        </script> 
+        <script type="text/javascript" src="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.js"></script>
     </head>
     <body>
         <div data-role="page">
             <div data-role="header" data-theme="b"><h1>BF3 Server Admin</h1></div>
             <div data-role="content" id="one">
-                <h2>Do with player <span id="playerName"></span></h2>
+                <h2>Do with player <span id="playerName">REPLACETHISWITHPLAYERNAME</span></h2>
                 <ul data-role="listview" data-inset="true" data-theme="d">
-                <li><a href="#"  onclick="Do('kick'); return false;">Kick</a></li>
-                <li><a href="#"  onclick="Do('permanentban'); return false;">Permanent ban</a></li>
-                <li><a href="#"  onclick="Do('roundban'); return false;">One round ban</a></li>
-                <li><a href="#"  onclick="Do('temporaryban'); return false;">1 minute ban</a></li>
-                <li><a href="#"  onclick="Do('kill'); return false;">Kill</a></li>
+                <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=kick">Kick</a></li>
+                <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=permanentban">Permanent ban</a></li>
+                <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=roundban">One round ban</a></li>
+                <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=temporaryban">1 minute ban</a></li>
+                <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=kill">Kill</a></li>
                 </ul>
             </div>
         </div>

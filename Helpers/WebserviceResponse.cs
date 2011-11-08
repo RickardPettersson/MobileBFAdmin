@@ -78,7 +78,8 @@ namespace BFAdmin.Helpers
 
                 if (Program.Playerlist.Count == 0)
                 {
-                    sb.Append("<li><a href=\"/do?player=apa\">No players on the server</a></li>");
+                    // /do?player=apa
+                    sb.Append("<li><a href=\"#\">No players on the server</a></li>");
                 }
                 else
                 {
@@ -144,7 +145,7 @@ namespace BFAdmin.Helpers
                     // Add the command dictionary to the queue system
                     Program.PlayerCommandsQueue.Enqueue(command);
 
-                    answer = "OK";
+                    answer = "redirect=/";
                 }
             }
         }

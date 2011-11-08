@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace BFAdmin.Helpers
 {
@@ -77,6 +78,12 @@ namespace BFAdmin.Helpers
                 WebserviceResponse responser = new WebserviceResponse(serverRequest);
 
                 string answer = responser.GetAnswer();
+
+                // Fix for redirects
+                if (answer.ToLower().Contains("redirect="))
+                {
+                    context.Response.Redirect(answer.ToLower().Replace("redirect=", ""));
+                }
 
                 byte[] buffer = System.Text.UTF8Encoding.UTF8.GetBytes(answer);
 
