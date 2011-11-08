@@ -23,6 +23,7 @@ namespace BFAdmin
         private static System.Timers.Timer aTimer;
 
         public static List<Player> Playerlist = new List<Player>();
+        public static Queue<Dictionary<string, string>> PlayerCommandsQueue = new Queue<Dictionary<string, string>>();
 
         static void Main(string[] args)
         {
@@ -61,7 +62,7 @@ namespace BFAdmin
                 rconClient.RoundOver += new EventHandler(rconClient_RoundOver);
                 rconClient.Connect();
 
-                aTimer = new System.Timers.Timer(2000);
+                aTimer = new System.Timers.Timer(5000);
                 aTimer.Elapsed += new ElapsedEventHandler(ListPlayers);
                 aTimer.Enabled = true;
 
@@ -109,12 +110,26 @@ namespace BFAdmin
 
         static void rconClient_PlayerLeft(object sender, PlayerEventArgs e)
         {
-            Log.Info("PlayerLeft - Player: " + e.Player.Name);
+            if (e.Player == null)
+            {
+                Log.Info("PlayerLeft - Player: n/a");
+            }
+            else
+            {
+                Log.Info("PlayerLeft - Player: " + e.Player.Name);
+            }
         }
 
         static void rconClient_PlayerKilled(object sender, PlayerKilledEventArgs e)
         {
-            Log.Info("PlayerKilled - Attacker: " + e.Attacker.Name + " - Victim: " + e.Victim.Name + " - Weapon: " + e.Weapon + " - Headshot: " + e.Headshot.ToString());
+            if (e.Attacker == null)
+            {
+                Log.Info("PlayerKilled - Attacker: N/A - Victim: " + e.Victim.Name + " - Weapon: " + e.Weapon + " - Headshot: " + e.Headshot.ToString());
+            }
+            else
+            {
+                Log.Info("PlayerKilled - Attacker: " + e.Attacker.Name + " - Victim: " + e.Victim.Name + " - Weapon: " + e.Weapon + " - Headshot: " + e.Headshot.ToString());
+            }
         }
 
         static void rconClient_PlayerJoined(object sender, PlayerEventArgs e)
@@ -156,6 +171,11 @@ namespace BFAdmin
 
         static void rconClient_Disconnected(object sender, DisconnectedEventArgs e)
         {
+            aTimer.Enabled = false;
+            aTimer.Dispose();
+
+            Webservice.Stop();
+
             Log.Info("Disconnected - Message: " + e.Message);
         }
 
@@ -172,23 +192,81 @@ namespace BFAdmin
 
         private static void ListPlayers(object source, ElapsedEventArgs e)
         {
+            // Get the player collection from rcon library
             PlayerCollection players = rconClient.Players;
+
+            // Convert pplayer collection to playerlist
             Playerlist = players.ToList();
 
+            // Check if we got any players
             if (players.Count == 0)
             {
                 Log.Info("No players on the server");
+                aTimer.Interval = 5 * 60 * 1000;
             }
             else
             {
-                Log.Info("Playerlist - Start");
+                aTimer.Interval = 5000;
+
+                Log.Info(players.Count + " players on the server");
+
+                if (PlayerCommandsQueue.Count > 0)
+                {
+                    do
+                    {
+                        Dictionary<string, string> command = PlayerCommandsQueue.Dequeue();
+
+
+                        Player player;
+                        try
+                        {
+                            // Get the player object from rcon library
+                            player = rconClient.Players.First(p => p.Name == command.Keys.First());
+
+                            // Check what command and do it
+                            switch (command[command.Keys.First()].ToLower())
+                            {
+                                case "kick":
+                                    player.Kick();
+                                    break;
+                                case "permanentban":
+                                    player.PermanentBan(BanTargetType.Name);
+                                    break;
+                                case "temporaryban":
+                                    int seconds = 60;
+                                    if (command.Keys.Contains("seconds"))
+                                    {
+                                        seconds = Convert.ToInt32(command["seconds"]);
+                                    }
+                                    player.TemporaryBan(BanTargetType.Name, seconds);
+                                    break;
+                                case "roundban":
+                                    int rounds = 1;
+                                    if (command.Keys.Contains("rounds"))
+                                    {
+                                        rounds = Convert.ToInt32(command["rounds"]);
+                                    }
+                                    player.RoundBan(rounds, BanTargetType.Name);
+                                    break;
+                                case "kill":
+                                    player.Kill();
+                                    break;
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Log.Info("Exception when try to do commando " + command[command.Keys.First()] + " on player " + command.Keys.First() + " - Exception: " + ex.ToString());
+                        }
+                    } while (PlayerCommandsQueue.Count != 0);
+                }
+                /*Log.Info("Playerlist - Start");
 
                 foreach (Player player in players)
                 {
                     Console.WriteLine(player.Name + " - TeamId: " + player.TeamId + " - SquadId: " + player.SquadId + " - Score: " + player.Score + " - Kills: " + player.Kills + " - Deaths: " + player.Deaths);
                 }
 
-                Log.Info("Playerlist - End");
+                Log.Info("Playerlist - End");*/
             }
         }
     }

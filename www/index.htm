@@ -1,0 +1,26 @@
+﻿<html>
+    <head>
+        <title>Battlefield 3 Server Admin</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.css" />
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+        <script type="text/javascript">
+            $(document).bind("mobileinit", function () {
+                $.mobile.ajaxEnabled = false;
+                window.setTimeout('location.reload()', 10000);
+            });
+        </script>   
+        <script type="text/javascript" src="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.js"></script>
+    </head>
+    <body>
+        <div data-role="page">
+            <div data-role="header" data-theme="b"><h1>BF3 Server Admin</h1></div>
+            <div data-role="content" id="one">
+                <h2>Playerlist</h2>
+                <ul data-role="listview" data-inset="true" data-theme="d">
+                    <PLAYERLIST>
+                </ul>
+            </div>
+        </div>
+    </body>
+</html>

@@ -2,13 +2,14 @@
 using System.IO;
 using System.Net;
 using System.Threading;
+using System.Text;
 
 namespace BFAdmin.Helpers
 {
     public class Webservice
     {
-        static private HttpListener listener = null;
-        static private Thread thread = null;
+        private static  HttpListener listener = null;
+        private static Thread thread = null;
 
         public static void Start(int port)
         {
@@ -19,6 +20,8 @@ namespace BFAdmin.Helpers
                 string endpoint = "http://*:" + port + "/";
 
                 listener.Prefixes.Add(endpoint);
+                listener.AuthenticationSchemes = AuthenticationSchemes.Basic;
+
                 listener.Start();
 
                 thread = new Thread(() =>
@@ -59,31 +62,55 @@ namespace BFAdmin.Helpers
             // Console log the request
             Log.Info("Webservice > Request: " + request.RemoteEndPoint.ToString().Split(':')[0] + " - HTTP " + request.HttpMethod + " - " + request.Url);
 
-            // Get the URL as string
-            string url = request.Url.ToString();
-
-            // Get the raw data for HTTP Posts
-            string rawData = new StreamReader(request.InputStream).ReadToEnd();
-
-            WebserviceRequest serverRequest = new WebserviceRequest(url, rawData, request);
-
-            WebserviceResponse responser = new WebserviceResponse(serverRequest);
-
-            string answer = responser.GetAnswer();
-
-            byte[] buffer = System.Text.UTF8Encoding.UTF8.GetBytes(answer);
-
-            try
+            HttpListenerBasicIdentity identity = (HttpListenerBasicIdentity)context.User.Identity;
+            if ((identity.Name == System.Configuration.ConfigurationManager.AppSettings["WebserviceAdminUsername"]) && (identity.Password == System.Configuration.ConfigurationManager.AppSettings["WebserviceAdminPassword"]))
             {
-                HttpListenerResponse response = context.Response;
-                response.ContentLength64 = buffer.Length;
-                System.IO.Stream output = response.OutputStream;
-                output.Write(buffer, 0, buffer.Length);
-                output.Close();
+
+                // Get the URL as string
+                string url = request.Url.ToString();
+
+                // Get the raw data for HTTP Posts
+                string rawData = new StreamReader(request.InputStream).ReadToEnd();
+
+                WebserviceRequest serverRequest = new WebserviceRequest(url, rawData, request);
+
+                WebserviceResponse responser = new WebserviceResponse(serverRequest);
+
+                string answer = responser.GetAnswer();
+
+                byte[] buffer = System.Text.UTF8Encoding.UTF8.GetBytes(answer);
+
+                try
+                {
+                    HttpListenerResponse response = context.Response;
+                    response.ContentLength64 = buffer.Length;
+                    System.IO.Stream output = response.OutputStream;
+                    output.Write(buffer, 0, buffer.Length);
+                    output.Close();
+                }
+                catch (Exception ex)
+                {
+                    Log.Error("Webservice > HandleRequest - Exception: " + ex.ToString());
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Log.Error("Webservice > HandleRequest - Exception: " + ex.ToString());
+                context.Response.StatusCode = 401;
+
+                context.Response.AddHeader("WWW-Authenticate",
+                    "Basic Realm=\"Battlefield Server Admin\""); // show login dialog
+                byte[] message = new UTF8Encoding().GetBytes("Access denied");
+                context.Response.ContentLength64 = message.Length;
+                context.Response.OutputStream.Write(message, 0, message.Length);
+
+                try
+                {
+                    context.Response.Close();
+                }
+                catch
+                {
+                    // client closed connection before the content was sent
+                }
             }
         }
     }
