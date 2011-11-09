@@ -92,6 +92,20 @@ namespace BFAdmin.Helpers
                         }
                     }
 
+                    // Check if we got a roundban to do
+                    if (todo.ToLower() == "roundban")
+                    {
+                        // Check if we got number of rounds as querystring
+                        if (myRequest.Data.Keys.Contains("no"))
+                        {
+                            command.Add("rounds", myRequest.Data["no"]);
+                        }
+                        else
+                        {
+                            command.Add("rounds", "1");
+                        }
+                    }
+
                     // Add the command dictionary to the queue system
                     Program.PlayerCommandsQueue.Enqueue(command);
 
