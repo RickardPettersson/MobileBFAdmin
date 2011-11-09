@@ -265,12 +265,7 @@ namespace BFAdmin
                                     player.TemporaryBan(BanTargetType.Name, seconds);
                                     break;
                                 case "roundban":
-                                    int rounds = 1;
-                                    if (command.Keys.Contains("rounds"))
-                                    {
-                                        rounds = Convert.ToInt32(command["rounds"]);
-                                    }
-                                    player.RoundBan(rounds, BanTargetType.Name);
+                                    player.RoundBan(BanTargetType.Name);
                                     break;
                                 case "kill":
                                     player.Kill();

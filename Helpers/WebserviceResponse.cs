@@ -78,20 +78,6 @@ namespace BFAdmin.Helpers
                     // Add player and command to the dictionary
                     command.Add(player, todo.ToLower());
 
-                    // Check if we got a roundban to do
-                    if (todo.ToLower() == "roundban")
-                    {
-                        // Check if we got number of rounds as querystring
-                        if (myRequest.Data.Keys.Contains("no"))
-                        {
-                            command.Add("rounds", myRequest.Data["no"]);
-                        }
-                        else
-                        {
-                            command.Add("rounds", "1");
-                        }
-                    }
-
                     // Check if we got a temporaryban to do
                     if (todo.ToLower() == "temporaryban")
                     {

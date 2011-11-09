@@ -49,9 +49,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BF3Rcon, Version=3.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="BF3Rcon, Version=3.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\BF3Rcon3_1-bin-test1\BF3Rcon.dll</HintPath>
+      <HintPath>Vendor\bf3rcon-4899\BF3Rcon.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
