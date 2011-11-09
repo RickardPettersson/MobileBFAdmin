@@ -17,6 +17,7 @@ In the application folder you have a file called app.config that are a text file
 * RCONServerIP = RCON server ip/host
 * RCONServerPort = RCON server port, default for BF3 is 47200
 * RCONServerPassword = RCON server password
+* WebserviceHost = What host the webservice should listen on, default is * and listening on all ip and hosts
 * WebservicePort = What port you whant the webservice to listen on, default port is 80 for web
 * WebserviceAdminUsername = Username to access the webinterface
 * WebserviceAdminPassword = Password to access the webinterface
