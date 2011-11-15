@@ -78,6 +78,9 @@
     <Content Include="NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="www\index.htm">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="www\page.htm">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

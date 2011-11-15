@@ -25,7 +25,7 @@ namespace BFAdmin.Helpers
                 try
                 {
                     // Read the html file in to a string
-                    answer = File.ReadAllText("www/page.htm");
+                    answer = File.ReadAllText("www/index.htm");
                 }
                 catch (Exception ex)
                 {
