@@ -21,7 +21,7 @@ namespace BFAdmin
         private static int webservicePort = 0;
 
         // Create the rcon client object
-        private static RconClient rconClient;
+        public static RconClient rconClient;
 
         // Create a timer object
         private static System.Timers.Timer aTimer;
@@ -148,6 +148,9 @@ namespace BFAdmin
 
         static void rconClient_PlayerJoined(object sender, PlayerEventArgs e)
         {
+            // If there is players on the server then heck for players every 5 seconds
+            aTimer.Interval = 5000;
+
             Log.Info("PlayerJoined - Player: " + e.Player.Name);
         }
 

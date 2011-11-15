@@ -7,26 +7,18 @@
         <script type="text/javascript">
             $(document).bind("mobileinit", function () {
                 $.mobile.ajaxEnabled = false;
-                //window.setTimeout('location.reload()', 10000);
             });
-        </script> 
+        </script>   
         <script type="text/javascript" src="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.js"></script>
     </head>
     <body>
         <div data-role="page">
             <div data-role="header" data-theme="b" data-position="inline">
-                <a href="/Playerlist" data-icon="back">Back</a>
+                <a href="/" data-icon="back">Back</a>
                 <h1>BF3 Server Admin</h1>
             </div>
             <div data-role="content" id="one">
-                <h2>Do with player <span id="playerName">REPLACETHISWITHPLAYERNAME</span></h2>
-                <ul data-role="listview" data-inset="true" data-theme="d">
-                <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=kick">Kick</a></li>
-                <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=permanentban">Permanent ban</a></li>
-                <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=roundban">One round ban</a></li>
-                <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=temporaryban">1 minute ban</a></li>
-                <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=kill">Kill</a></li>
-                </ul>
+                <CONTENT>
             </div>
         </div>
     </body>
