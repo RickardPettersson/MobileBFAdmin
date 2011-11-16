@@ -205,14 +205,6 @@ namespace BFAdmin.Helpers
             }
             else if (new Regex("/Maplist").Match(myRequest.URL).Success)
             {
-                // rconClient.Maps.NextMap
-                // maps.RunNextRound
-                // rconClient.Maps.EndRound(-1);
-                // rconClient.Maps[0].CurrentRound
-                // rconClient.Maps[0].FriendlyMode
-                // rconClient.Maps[0].FriendlyName
-                // rconClient.Maps[0].TotalRounds
-
                 try
                 {
                     // Read the html file in to a string
@@ -226,19 +218,126 @@ namespace BFAdmin.Helpers
                 StringBuilder sb = new StringBuilder();
 
                 sb.Append("<h2>Maplist</h2>");
-
+                sb.Append("Yellow = Current map, Blue = Next map");
                 sb.Append("<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"d\">");
 
-                MapCollection maps = Program.rconClient.Maps;
-                foreach (Map map in maps)
+                MapCollection mapCollextion = Program.rconClient.Maps;
+                Map currentMap = mapCollextion.CurrentMap;
+                Map nextMap = mapCollextion.NextMap;
+                
+                foreach (Map map in mapCollextion)
                 {
-                    sb.Append("<li><a href=\"#\">" + map.FriendlyName + " - " + map.FriendlyMode + " (" + map.CurrentRound + "/" + map.TotalRounds + ")</a></li>");
+                    if ((map.FriendlyName == currentMap.FriendlyName) && (map.FriendlyMode == currentMap.FriendlyMode) && (map.CurrentRound == currentMap.CurrentRound) && (map.TotalRounds == currentMap.TotalRounds))
+                    {
+                        sb.Append("<li data-theme=\"e\"><a href=\"#\">" + map.FriendlyName + " - " + map.FriendlyMode + " <span class=\"ui-li-count\">" + map.CurrentRound + "/" + map.TotalRounds + "</span></a></li>");
+                    }
+                    else if ((map.FriendlyName == nextMap.FriendlyName) && (map.FriendlyMode == nextMap.FriendlyMode) && (map.CurrentRound == nextMap.CurrentRound) && (map.TotalRounds == nextMap.TotalRounds))
+                    {
+                        sb.Append("<li data-theme=\"b\"><a href=\"#\">" + map.FriendlyName + " - " + map.FriendlyMode + " <span class=\"ui-li-count\">" + map.CurrentRound + "/" + map.TotalRounds + "</span></a></li>");
+                    }
+                    else
+                    {
+                        sb.Append("<li><a href=\"#\">" + map.FriendlyName + " - " + map.FriendlyMode + " <span class=\"ui-li-count\">" + map.CurrentRound + "/" + map.TotalRounds + "</span></a></li>");
+                    }
+                }
+
+                sb.Append("</ul>");
+
+                sb.Append("<h2>Commands</h2>");
+                sb.Append("<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"d\">");
+                sb.Append("<li><a href=\"/MapCommand?cmd=endround&no=1\">End round (Team 1 wins)</a></li>");
+                sb.Append("<li><a href=\"/MapCommand?cmd=endround&no=2\">End round (Team 2 wins)</a></li>");
+                sb.Append("<li><a href=\"/MapCommand?cmd=runnextround\">Run next round</a></li>");
+                sb.Append("<li><a href=\"/MapCommand?cmd=restartround\">Restart round</a></li>");
+                sb.Append("<li><a href=\"/SetNextMap\">Set next map</a></li>");
+                sb.Append("</ul>");
+
+                // Add content to the page
+                answer = answer.Replace("<BACKURL>", "/").Replace("<CONTENT>", sb.ToString());
+            }
+            else if (new Regex("/SetNextMap").Match(myRequest.URL).Success)
+            {
+                try
+                {
+                    // Read the html file in to a string
+                    answer = File.ReadAllText("www/page.htm");
+                }
+                catch (Exception ex)
+                {
+                    string apa = string.Empty;
+                }
+
+                StringBuilder sb = new StringBuilder();
+
+                sb.Append("<h2>Set next map</h2>");
+                sb.Append("Yellow = Current map, Blue = Next map");
+                sb.Append("<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"d\">");
+
+                MapCollection mapCollextion = Program.rconClient.Maps;
+                Map currentMap = mapCollextion.CurrentMap;
+                Map nextMap = mapCollextion.NextMap;
+
+                int mapIndex = 0;
+
+                foreach (Map map in mapCollextion)
+                {
+                    if ((map.FriendlyName == currentMap.FriendlyName) && (map.FriendlyMode == currentMap.FriendlyMode) && (map.CurrentRound == currentMap.CurrentRound) && (map.TotalRounds == currentMap.TotalRounds))
+                    {
+                        sb.Append("<li data-theme=\"e\"><a href=\"/MapCommand?cmd=setnextmap&no=" + mapIndex + "\">" + map.FriendlyName + " - " + map.FriendlyMode + " <span class=\"ui-li-count\">" + map.CurrentRound + "/" + map.TotalRounds + "</span></a></li>");
+                    }
+                    else if ((map.FriendlyName == nextMap.FriendlyName) && (map.FriendlyMode == nextMap.FriendlyMode) && (map.CurrentRound == nextMap.CurrentRound) && (map.TotalRounds == nextMap.TotalRounds))
+                    {
+                        sb.Append("<li data-theme=\"b\"><a href=\"/MapCommand?cmd=setnextmap&no=" + mapIndex + "\">" + map.FriendlyName + " - " + map.FriendlyMode + " <span class=\"ui-li-count\">" + map.CurrentRound + "/" + map.TotalRounds + "</span></a></li>");
+                    }
+                    else
+                    {
+                        sb.Append("<li><a href=\"/MapCommand?cmd=setnextmap&no=" + mapIndex + "\">" + map.FriendlyName + " - " + map.FriendlyMode + " <span class=\"ui-li-count\">" + map.CurrentRound + "/" + map.TotalRounds + "</span></a></li>");
+                    }
+                    mapIndex += 1;
                 }
 
                 sb.Append("</ul>");
 
                 // Add content to the page
-                answer = answer.Replace("<CONTENT>", sb.ToString());
+                answer = answer.Replace("<BACKURL>", "/Maplist").Replace("<CONTENT>", sb.ToString());
+            }
+            else if (new Regex("/MapCommand").Match(myRequest.URL).Success)
+            {
+                // Set some default values
+                string cmd = string.Empty;
+                int cmdNumber = 1;
+
+                // Check if we got command querystring
+                if (myRequest.Data.Keys.Contains("cmd"))
+                {
+                    cmd = myRequest.Data["cmd"];
+                }
+                
+                // Check if we got command number querystring
+                if (myRequest.Data.Keys.Contains("no"))
+                {
+                    cmdNumber = Convert.ToInt32(myRequest.Data["no"]);
+                }
+
+                MapCollection mapCollextion = Program.rconClient.Maps;
+
+                switch (cmd.ToLower())
+                {
+                    case "endround":
+                        mapCollextion.EndRound(cmdNumber);
+                        break;
+                    case "restartround":
+                        mapCollextion.RestartRound();
+                        break;
+                    case "runnextround":
+                        mapCollextion.RunNextRound();
+                        break;
+                    case "setnextmap":
+                        mapCollextion.SetNextMap(cmdNumber);
+                        break;
+                }
+
+                answer = "redirect=/Maplist";
             }
         }
 

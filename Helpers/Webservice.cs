@@ -76,8 +76,22 @@ namespace BFAdmin.Helpers
             // Get the http listener basic identity object
             HttpListenerBasicIdentity identity = (HttpListenerBasicIdentity)context.User.Identity;
 
-            // Check the basic authentiaction with app.config appsettings
-            if ((identity.Name == System.Configuration.ConfigurationManager.AppSettings["WebserviceAdminUsername"]) && (identity.Password == System.Configuration.ConfigurationManager.AppSettings["WebserviceAdminPassword"]))
+            bool authenticated = false;
+
+            if (identity.IsAuthenticated)
+            {
+                authenticated = true;
+            }
+            else
+            {
+                // Check the basic authentiaction with app.config appsettings
+                if ((identity.Name == System.Configuration.ConfigurationManager.AppSettings["WebserviceAdminUsername"]) && (identity.Password == System.Configuration.ConfigurationManager.AppSettings["WebserviceAdminPassword"]))
+                {
+                    authenticated = true;
+                }
+            }
+
+            if (authenticated)
             {
                 // Get the URL as string
                 string url = request.Url.ToString();
@@ -98,7 +112,7 @@ namespace BFAdmin.Helpers
                 if (answer.ToLower().Contains("redirect="))
                 {
                     // Redirect the user
-                    context.Response.Redirect(answer.ToLower().Replace("redirect=", ""));
+                    context.Response.Redirect(answer.Replace("redirect=", ""));
                 }
 
                 // Set up a byte buffer
