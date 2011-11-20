@@ -1,0 +1,1663 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>BF3Rcon</name>
+    </assembly>
+    <members>
+        <member name="T:System.Net.Battlefield3.TeamPlayerSubset">
+            <summary>
+            This <see cref="T:System.Net.Battlefield3.PlayerSubset"/> refers to all players on a specific team in the server.
+            </summary>
+        </member>
+        <member name="T:System.Net.Battlefield3.PlayerSubset">
+            <summary>
+            Provides a base class for <see cref="T:System.Net.Battlefield3.Player"/> subsets that must be inherited.
+            </summary>
+            <remarks>
+            <see cref="T:System.Net.Battlefield3.PlayerSubset">PlayerSubsets</see> refer to a specific group of <see cref="T:System.Net.Battlefield3.Player">Players</see>.<para/>
+            The four provided <see cref="T:System.Net.Battlefield3.PlayerSubset">PlayerSubsets</see> are <see cref="T:System.Net.Battlefield3.AllPlayerSubset"/>, 
+            <see cref="T:System.Net.Battlefield3.TeamPlayerSubset"/>, <see cref="T:System.Net.Battlefield3.SquadPlayerSubset"/>, <see cref="T:System.Net.Battlefield3.NamePlayerSubset"/>.
+            
+            <seealso cref="T:System.Net.Battlefield3.AllPlayerSubset"/><seealso cref="T:System.Net.Battlefield3.TeamPlayerSubset"/><seealso cref="T:System.Net.Battlefield3.SquadPlayerSubset"/><seealso cref="T:System.Net.Battlefield3.NamePlayerSubset"/>
+            </remarks>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerSubset.Name">
+            <summary>
+            Gets the name of the <see cref="T:System.Net.Battlefield3.PlayerSubset"/>.
+            </summary>
+            <value>The name of the <see cref="T:System.Net.Battlefield3.PlayerSubset"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerSubset.Values">
+            <summary>
+            Gets the value of the <see cref="T:System.Net.Battlefield3.Player"/> subset.
+            </summary>
+            <value>The value of the subset.</value>
+        </member>
+        <member name="M:System.Net.Battlefield3.TeamPlayerSubset.#ctor(System.Int32)">
+            <summary>
+            Creates a new <see cref="T:System.Net.Battlefield3.TeamPlayerSubset"/>
+            </summary>
+            <param name="team">The target team of the <see cref="T:System.Net.Battlefield3.TeamPlayerSubset"/>.</param>
+        </member>
+        <member name="P:System.Net.Battlefield3.TeamPlayerSubset.Team">
+            <summary>
+            Gets the team of the <see cref="T:System.Net.Battlefield3.TeamPlayerSubset"/>.
+            </summary>
+            <value>The team of the <see cref="T:System.Net.Battlefield3.TeamPlayerSubset"/>.</value>
+        </member>
+        <member name="T:System.Net.Battlefield3.ReadState">
+            <summary>
+            Provides the socket's state object for asynchronous sockets
+            </summary>
+        </member>
+        <member name="T:System.Net.Battlefield3.ParsePacketState">
+            <summary>
+            Provides the client's state object for parsing packets in a <see cref="T:System.Threading.ThreadPool"/> thread.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.SynchronousReadState.Dispose">
+            <summary>
+            Disposes the RconClient object.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.SynchronousReadState.Dispose(System.Boolean)">
+            <summary>
+            Disposes the RconClient object.
+            </summary>
+            <param name="disposing">Whether or not to release managed resources.</param>
+        </member>
+        <member name="T:System.Net.Battlefield3.RconClient">
+            <summary>
+            Provides an implementation of the Battlefield 3 RCON protocol.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.#ctor">
+            <summary>
+            Creates a new <see cref="T:System.Net.Battlefield3.RconClient"/> for remotely communicating with a Battlefield 3 server.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnRawRead(System.Net.Battlefield3.RawReadEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.RawRead"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.Net.Battlefield3.RawReadEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnResponse(System.Net.Battlefield3.ResponseEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.Response"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.Net.Battlefield3.ResponseEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnConnected">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.Connected"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnConnectError(System.Net.Battlefield3.ConnectErrorEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.ConnectError"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.Net.Battlefield3.ConnectErrorEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnDisconnected(System.Net.Battlefield3.DisconnectedEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.Disconnected"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.Net.Battlefield3.DisconnectedEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnLoggedOn">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.LoggedOn"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnPlayerLeft(System.Net.Battlefield3.PlayerEventArgs)">
+            <summary>
+            Occurs when a <see cref="T:System.Net.Battlefield3.Player"/> leaves the server.
+            </summary>
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.PlayerLeft"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.Net.Battlefield3.PlayerEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnPlayerJoined(System.Net.Battlefield3.PlayerEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.PlayerJoined"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.Net.Battlefield3.PlayerEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnPlayerJoining(System.Net.Battlefield3.PlayerJoiningEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.PlayerJoining"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.Net.Battlefield3.PlayerJoiningEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnPlayerAuthenticated(System.Net.Battlefield3.PlayerAuthenticatedEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.PlayerAuthenticated"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.Net.Battlefield3.PlayerAuthenticatedEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnPlayerKilled(System.Net.Battlefield3.PlayerKilledEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.PlayerKilled"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.Net.Battlefield3.PlayerKilledEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnPlayerSpawned(System.Net.Battlefield3.PlayerEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.PlayerSpawned"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.Net.Battlefield3.PlayerEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnPlayerMoved(System.Net.Battlefield3.PlayerEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.PlayerMoved"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.Net.Battlefield3.PlayerEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnRoundOver">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.RoundOver"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnLevelLoaded(System.Net.Battlefield3.LevelLoadedEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.LevelLoaded"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.Net.Battlefield3.LevelLoadedEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnPlayerChat(System.Net.Battlefield3.PlayerChatEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.PlayerChat"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.Net.Battlefield3.PlayerChatEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.OnPunkBusterMessage(System.Net.Battlefield3.PunkBusterMessageEventArgs)">
+            <summary>
+            Raises the <see cref="E:System.Net.Battlefield3.RconClient.PunkBusterMessage"/> event of the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+            <param name="e">A <see cref="T:System.Net.Battlefield3.PunkBusterMessageEventArgs"/> that contains the event data.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.Connect">
+            <summary>
+            Connects the <see cref="T:System.Net.Battlefield3.RconClient"/> to the server.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.Disconnect">
+            <summary>
+            Disconnects the <see cref="T:System.Net.Battlefield3.RconClient"/> from the server.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.SendPacket(System.Net.Battlefield3.Packet)">
+            <summary>
+            Sends a <see cref="T:System.Net.Battlefield3.Packet"/> to the server.
+            </summary>
+            <param name="packet">The <see cref="T:System.Net.Battlefield3.Packet"/> that is being sent.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.SendPacket(System.Boolean,System.Boolean,System.Int32,System.String[])">
+            <summary>
+            Sends a <see cref="T:System.Net.Battlefield3.Packet"/> to the server.
+            </summary>
+            <param name="isFromServer">Whether or not the <see cref="T:System.Net.Battlefield3.Packet"/> originates from the server.</param>
+            <param name="isResponse">Whether or not the <see cref="T:System.Net.Battlefield3.Packet"/> is a response to another one.</param>
+            <param name="sequence">The sequence number of the <see cref="T:System.Net.Battlefield3.Packet"/>.</param>
+            <param name="words">The <see cref="T:System.Net.Battlefield3.Packet">Packet's</see> words.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.SendResponse(System.Int32,System.String[])">
+            <summary>
+            Sends a response to a <see cref="T:System.Net.Battlefield3.Packet"/> originally sent by the server.
+            </summary>
+            <param name="sequence">The sequence number of the original <see cref="T:System.Net.Battlefield3.Packet"/>.</param>
+            <param name="words">The words of the <see cref="T:System.Net.Battlefield3.Packet"/> being sent.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.SendAsynchronousRequest(System.String[])">
+            <summary>
+            Sends a request for information to the server.
+            </summary>
+            <param name="words">The words of the <see cref="T:System.Net.Battlefield3.Packet"/> being sent.</param>
+            <returns>The sequence number used in the request.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.SendRequest(System.String[])">
+            <summary>
+            Sends a request for information that returns the response <see cref="T:System.Net.Battlefield3.Packet"/>.
+            </summary>
+            <param name="words">The words of the <see cref="T:System.Net.Battlefield3.Packet"/> being sent.</param>
+            <returns>The <see cref="T:System.Net.Battlefield3.Packet"/> set in response to the request or null (Nothing in Visual Basic) if a timeout occurs.</returns>
+            <remarks>
+            A timeout will occur when <see cref="P:System.Net.Battlefield3.RconClient.SynchronousReadTimeout"/> elapses.
+            </remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.LogOn(System.String)">
+            <summary>
+            Logs the <see cref="T:System.Net.Battlefield3.RconClient"/> onto the server without blocking the thread. 
+            </summary>
+            <param name="password">The password for the server's RCON interface.</param>
+            <remarks>If you'd like to block the thread while logging in, use <see cref="M:System.Net.Battlefield3.RconClient.LogOn(System.String,System.Boolean)"/>
+            <seealso cref="M:System.Net.Battlefield3.RconClient.LogOn(System.String,System.Boolean)"/></remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.LogOn(System.String,System.Boolean)">
+            <summary>
+            Logs the <see cref="T:System.Net.Battlefield3.RconClient"/> onto the server.
+            </summary>
+            <param name="password">The password for the server's RCON interface.</param>
+            <param name="threaded">If true, the method will not block the thread, but you will not know if the login fails.</param>
+            <returns>True if login was successful or false on a failed login or when <paramref name="threaded"/> is True.</returns>
+            <remarks>
+            In order to ensure this method doesn't block the thread when <paramref name="threaded"/> is false,
+            each point of communication (there are two of them), will wait a period of time before returning false,
+            as defined by <see cref="P:System.Net.Battlefield3.RconClient.SynchronousReadTimeout"/>. In the final point of communication, it is possible that
+            the login attempt will succeed after timeout, so, while this method would return false, the <see cref="E:System.Net.Battlefield3.RconClient.LoggedOn"/>
+            event would still be raised.
+            </remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.Dispose">
+            <summary>
+            Disposes the RconClient object.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.RconClient.Dispose(System.Boolean)">
+            <summary>
+            Disposes the RconClient object.
+            </summary>
+            <param name="disposing">Whether or not to release managed resources.</param>
+        </member>
+        <member name="P:System.Net.Battlefield3.RconClient.Address">
+            <summary>
+            Gets or sets the address that this client will <see cref="M:System.Net.Battlefield3.RconClient.Connect"/> to.
+            </summary>
+            <value>The address of the server.</value>
+            <remarks>In order for changes of the <see cref="P:System.Net.Battlefield3.RconClient.Address"/> and <see cref="P:System.Net.Battlefield3.RconClient.Port"/> to take effect, you must
+            <see cref="M:System.Net.Battlefield3.RconClient.Disconnect"/> and <see cref="M:System.Net.Battlefield3.RconClient.Connect"/>.</remarks>
+        </member>
+        <member name="P:System.Net.Battlefield3.RconClient.Port">
+            <summary>
+            Gets or sets the port that this client will <see cref="M:System.Net.Battlefield3.RconClient.Connect"/> to.
+            </summary>
+            <value>The port of the server.</value>
+            <remarks>In order for changes of the <see cref="P:System.Net.Battlefield3.RconClient.Address"/> and <see cref="P:System.Net.Battlefield3.RconClient.Port"/> to take effect, you must
+            <see cref="M:System.Net.Battlefield3.RconClient.Disconnect"/> and <see cref="M:System.Net.Battlefield3.RconClient.Connect"/>.</remarks>
+        </member>
+        <member name="P:System.Net.Battlefield3.RconClient.IsConnected">
+            <summary>
+            Gets whether or not the <see cref="T:System.Net.Battlefield3.RconClient"/> is connected to the server.
+            </summary>
+            <value>True if the <see cref="T:System.Net.Battlefield3.RconClient"/> has connected to the server.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.RconClient.IsLoggedOn">
+            <summary>
+            Gets whether or not the <see cref="T:System.Net.Battlefield3.RconClient"/> has logged into the server.
+            </summary>
+            <value>True if the <see cref="T:System.Net.Battlefield3.RconClient"/> has logged into the server.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.RconClient.Players">
+            <summary>
+            Gets the <see cref="T:System.Net.Battlefield3.PlayerCollection"/> that contains all of the <see cref="T:System.Net.Battlefield3.Player">Players</see> on the server.
+            </summary>
+            <value>A <see cref="T:System.Net.Battlefield3.PlayerCollection"/> object containing the <see cref="T:System.Net.Battlefield3.Player">Players</see> in the server.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.RconClient.SuppressInternalCommands">
+            <summary>
+            Gets or sets whether or not the <see cref="E:System.Net.Battlefield3.RconClient.Response"/> event will be raised for commands sent internally.
+            </summary>
+            <value>Whether or not the <see cref="E:System.Net.Battlefield3.RconClient.Response"/> event will be raised for commands sent internally.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.RconClient.DisableSynchronizeChecking">
+            <summary>
+            Gets or sets whether or not the events will not check to see if the target object implements <see cref="T:System.ComponentModel.ISynchronizeInvoke"/>.
+            </summary>
+            <value>True if <see cref="T:System.Net.Battlefield3.RconClient"/> wont check for <see cref="T:System.ComponentModel.ISynchronizeInvoke"/>.</value>
+            <remarks>
+            By default, <see cref="T:System.Net.Battlefield3.RconClient"/> will check to see if the target object, such as a <see cref="!:System.Windows.Forms.Form"/>, 
+            has <see cref="P:System.ComponentModel.ISynchronizeInvoke.InvokeRequired"/> set to true. If it does, the object's 
+            <see cref="M:System.ComponentModel.ISynchronizeInvoke.Invoke(System.Delegate,System.Object[])"/> method will be called.<para/>
+            This property is used to disable this feature.
+            </remarks>
+        </member>
+        <member name="P:System.Net.Battlefield3.RconClient.SynchronousReadTimeout">
+            <summary>
+            Gets or sets the timeout for synchronous reads, in seconds.
+            </summary>
+            <value>The timeout for synchronous reads, in seconds.</value>
+            <remarks>
+            Synchronous reads are reads that request and parse/return data in the same method.<para/>
+            By default, the timeout is 10 seconds.<para/><para/>
+            One example of usage is the <see cref="T:System.Net.Battlefield3.MapCollection"/> class. When getting the maplist, 
+            <see cref="T:System.Net.Battlefield3.MapCollection"/> gets the data of three requests, and is able to return data.
+            </remarks>
+        </member>
+        <member name="P:System.Net.Battlefield3.RconClient.Maps">
+            <summary>
+            Gets the <see cref="T:System.Net.Battlefield3.MapCollection"/> object of the <see cref="T:System.Net.Battlefield3.RconClient"/>, allowing interaction with the
+            server's maplist.
+            </summary>
+            <value>The <see cref="T:System.Net.Battlefield3.RconClient">RconClient's</see> <see cref="T:System.Net.Battlefield3.MapCollection"/>.</value>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.RawRead">
+            <summary>
+            Occurs when the <see cref="T:System.Net.Battlefield3.RconClient"/> receives a <see cref="T:System.Net.Battlefield3.Packet"/>
+            </summary>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.Response">
+            <summary>
+            Occurs when the server responds to the <see cref="T:System.Net.Battlefield3.RconClient"/>.
+            </summary>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.Connected">
+            <summary>
+            Occurs when the <see cref="T:System.Net.Battlefield3.RconClient"/> has connected to the server.
+            </summary>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.ConnectError">
+            <summary>
+            Occurs when the <see cref="T:System.Net.Battlefield3.RconClient"/> has encountered an error when trying to connect to the server.
+            </summary>
+            <remarks>
+            This will only be raised when a SocketException occurs in the asynchronous connect method.
+            </remarks>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.Disconnected">
+            <summary>
+            Occurs when the <see cref="T:System.Net.Battlefield3.RconClient"/> has disconnected from the server.
+            </summary>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.LoggedOn">
+            <summary>
+            Occurs when the <see cref="T:System.Net.Battlefield3.RconClient"/> logs into the server.
+            </summary>
+            <remarks>The <see cref="T:System.Net.Battlefield3.RconClient"/> will have limited communication ability while not logged in.</remarks>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.PlayerLeft">
+            <summary>
+            Occurs when a <see cref="T:System.Net.Battlefield3.Player"/> leaves the server.
+            </summary>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.PlayerJoined">
+            <summary>
+            Occurs when a <see cref="T:System.Net.Battlefield3.Player"/> joins the server.
+            </summary>
+            <remarks>
+            This event is raised the first time the <see cref="T:System.Net.Battlefield3.Player"/> shows up in <see cref="P:System.Net.Battlefield3.RconClient.Players"/>.<para/>
+            Since this will be raised when a <see cref="T:System.Net.Battlefield3.Player"/> first ends up in <see cref="P:System.Net.Battlefield3.RconClient.Players"/>, this event
+            will be raised after the <see cref="T:System.Net.Battlefield3.RconClient"/> first connects. This behavior will be kept, for now, because
+            it has some uses.
+            </remarks>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.PlayerJoining">
+            <summary>
+            Occurs when a <see cref="T:System.Net.Battlefield3.Player"/> is joining the server.
+            </summary>
+            <remarks>
+            This event is raised before the player is in <see cref="P:System.Net.Battlefield3.RconClient.Players"/>.
+            </remarks>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.PlayerAuthenticated">
+            <summary>
+            Occurs when a <see cref="T:System.Net.Battlefield3.Player"/> is authenticated.
+            </summary>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.PlayerKilled">
+            <summary>
+            Occurs when a <see cref="T:System.Net.Battlefield3.Player"/> is killed.
+            </summary>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.PlayerSpawned">
+            <summary>
+            Occurs when a <see cref="T:System.Net.Battlefield3.Player"/> spawns.
+            </summary>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.PlayerMoved">
+            <summary>
+            Occurs when a <see cref="T:System.Net.Battlefield3.Player"/> is moved to a new team, squad, or both.
+            </summary>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.RoundOver">
+            <summary>
+            Occurs when the round has ended.
+            </summary>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.LevelLoaded">
+            <summary>
+            Occurs when a level has been loaded.
+            </summary>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.PlayerChat">
+            <summary>
+            Occurs when a <see cref="T:System.Net.Battlefield3.Player"/> or the server sends a message.
+            </summary>
+        </member>
+        <member name="E:System.Net.Battlefield3.RconClient.PunkBusterMessage">
+            <summary>
+            Occurs when PunkBuster sends a message.
+            </summary>
+        </member>
+        <member name="T:System.Net.Battlefield3.PunkBusterMessageEventArgs">
+            <summary>
+            Provides data for the <see cref="E:System.Net.Battlefield3.RconClient.PunkBusterMessage"/> event.
+            </summary>
+        </member>
+        <member name="P:System.Net.Battlefield3.PunkBusterMessageEventArgs.Message">
+            <summary>
+            Gets the PunkBuster message that was received.
+            </summary>
+            <value>The PunkBuster message.</value>
+            <remarks>
+            The <see cref="P:System.Net.Battlefield3.PunkBusterMessageEventArgs.Message"/> may contain other characters, such as newlines (carriage returns and/or line feeds).
+            </remarks>
+        </member>
+        <member name="T:System.Net.Battlefield3.Extensions">
+            <summary>
+            Contains extension methods.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.Extensions.HasValue(System.String)">
+            <summary>
+            Determines if a string has a value.
+            </summary>
+            <param name="str">The string that is being tested.</param>
+            <returns>True if the string is not null or empty.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Extensions.ToHexString(System.Byte[])">
+            <summary>
+            Converts a byte array into a hexadecimal string.
+            </summary>
+            <param name="bytes">An array of bytes to convert.</param>
+            <returns>A hexadecimal string containing converted from the byte array.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Extensions.ToInt32(System.String)">
+            <summary>
+            Converts a string into an int.
+            </summary>
+            <param name="str">The string to convert.</param>
+            <returns>The int.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Extensions.CaseInsensitiveEquals(System.String,System.String[])">
+            <summary>
+            Determines if the string is case-insensitively equal to the other.
+            </summary>
+            <param name="str">First string.</param>
+            <param name="str2">Other strings.</param>
+            <returns>I don't even have to document internal code :D</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Extensions.Success(System.Net.Battlefield3.Packet)">
+            <summary>
+            Determine whether the <see cref="T:System.Net.Battlefield3.Packet"/> request was a success.
+            </summary>
+            <param name="packet">The <see cref="T:System.Net.Battlefield3.Packet"/> that will be tested.</param>
+            <returns>True if the first word is "OK".</returns>
+            <remarks>
+            Since this is an extension method, <paramref name="packet"/> can be null (Nothing in Visual Basic).
+            This means that this method will work on <see cref="M:System.Net.Battlefield3.RconClient.SendRequest(System.String[])"/> if the request times out, 
+            where a timed out request returns false.
+            </remarks>
+        </member>
+        <member name="T:System.Net.Battlefield3.BanTargetType">
+            <summary>
+            Defines what the ban will target.
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.BanTargetType.IPAddress">
+            <summary>
+            The ban will target the <see cref="T:System.Net.Battlefield3.Player">Player's</see> IP address, if available.
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.BanTargetType.Name">
+            <summary>
+            The ban will target the <see cref="T:System.Net.Battlefield3.Player">Player's</see> name.
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.BanTargetType.Guid">
+            <summary>
+            The ban will target the <see cref="T:System.Net.Battlefield3.Player">Player's</see> GUID.
+            </summary>
+        </member>
+        <member name="T:System.Net.Battlefield3.Header">
+            <summary>
+            Represents the header of an RCON packet.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.Header.#ctor(System.Boolean,System.Boolean,System.Int32)">
+            <summary>
+            Creates a protocol <see cref="T:System.Net.Battlefield3.Header"/> object..
+            </summary>
+            <param name="isFromServer">Whether or not the <see cref="T:System.Net.Battlefield3.Packet"/> is from the server.</param>
+            <param name="isResponse">Whether or not the <see cref="T:System.Net.Battlefield3.Packet"/> is responding to another one.</param>
+            <param name="sequence">The sequence number of the <see cref="T:System.Net.Battlefield3.Packet"/>.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.Header.Equals(System.Object)">
+            <summary>
+            Specifies whether this <see cref="T:System.Net.Battlefield3.Header"/> is the same as the specified object.
+            </summary>
+            <param name="obj">The object to test.</param>
+            <returns>True if this <see cref="T:System.Net.Battlefield3.Header"/> is the same as the object.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Header.GetHashCode">
+            <summary>
+            Returns the hash code of this <see cref="T:System.Net.Battlefield3.Header"/>.
+            </summary>
+            <returns>An integer value specifying the hash value for this <see cref="T:System.Net.Battlefield3.Header"/>.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Header.op_Equality(System.Net.Battlefield3.Header,System.Net.Battlefield3.Header)">
+            <summary>
+            Compares two <see cref="T:System.Net.Battlefield3.Header"/> objects.
+            </summary>
+            <param name="firstHeader">The first <see cref="T:System.Net.Battlefield3.Header"/>.</param>
+            <param name="secondHeader">The second <see cref="T:System.Net.Battlefield3.Header"/>.</param>
+            <returns>True if both headers contain the same values.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Header.op_Inequality(System.Net.Battlefield3.Header,System.Net.Battlefield3.Header)">
+            <summary>
+            Compares two <see cref="T:System.Net.Battlefield3.Header"/> objects.
+            </summary>
+            <param name="firstHeader">The first <see cref="T:System.Net.Battlefield3.Header"/>.</param>
+            <param name="secondHeader">The second <see cref="T:System.Net.Battlefield3.Header"/>.</param>
+            <returns>True if both headers do not contain the same values.</returns>
+        </member>
+        <member name="P:System.Net.Battlefield3.Header.IsFromServer">
+            <summary>
+            Gets or sets whether or not the <see cref="T:System.Net.Battlefield3.Packet"/> was sent by the server.
+            </summary>
+            <value>True if the <see cref="T:System.Net.Battlefield3.Packet"/> was sent by the server.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Header.IsResponse">
+            <summary>
+            Gets or sets whether or not the <see cref="T:System.Net.Battlefield3.Packet"/> is responding to another <see cref="T:System.Net.Battlefield3.Packet"/>.
+            </summary>
+            <value>True if the <see cref="T:System.Net.Battlefield3.Packet"/> is responding to another <see cref="T:System.Net.Battlefield3.Packet"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Header.Sequence">
+            <summary>
+            Gets or sets the number uniquely identifying the <see cref="T:System.Net.Battlefield3.Packet"/> or set of <see cref="T:System.Net.Battlefield3.Packet">Packets</see>.
+            </summary>
+            <value>An integer uniquely identifying the <see cref="T:System.Net.Battlefield3.Packet"/>.</value>
+            <remarks>
+            If <see cref="P:System.Net.Battlefield3.Header.IsResponse"/> is true, the <see cref="P:System.Net.Battlefield3.Header.Sequence"/> will match that of an original <see cref="T:System.Net.Battlefield3.Packet"/>.<para/>
+            For instance, when sending a command to get player data, the server will respond with the same <see cref="P:System.Net.Battlefield3.Header.Sequence"/>.
+            </remarks>
+        </member>
+        <member name="T:System.Net.Battlefield3.PlayerChatEventArgs">
+            <summary>
+            Provides data for the <see cref="E:System.Net.Battlefield3.RconClient.PlayerChat"/> event.
+            </summary>
+            <remarks>
+            If the message wasn't sent by a <see cref="T:System.Net.Battlefield3.Player"/>, <see cref="P:System.Net.Battlefield3.PlayerEventArgs.Player"/> 
+            will be null (Nothing in Visual Basic).
+            </remarks>
+        </member>
+        <member name="T:System.Net.Battlefield3.PlayerEventArgs">
+            <summary>
+            Provides data for generic player events.
+            </summary>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerEventArgs.Player">
+            <summary>
+            Gets the target <see cref="P:System.Net.Battlefield3.PlayerEventArgs.Player"/> of the event.
+            </summary>
+            <value>The target <see cref="P:System.Net.Battlefield3.PlayerEventArgs.Player"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerChatEventArgs.Source">
+            <summary>
+            Gets the source of the message, as represented by a string.
+            </summary>
+            <value>
+            If the message came from a <see cref="T:System.Net.Battlefield3.Player"/>, this will return its <see cref="P:System.Net.Battlefield3.Player.Name"/>. 
+            Otherwise, this will return some other source, such as Server.
+            </value>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerChatEventArgs.Message">
+            <summary>
+            Gets the message that was sent.
+            </summary>
+            <value>The message that was sent.</value>
+        </member>
+        <member name="T:System.Net.Battlefield3.ConnectErrorEventArgs">
+            <summary>
+            Provides data for the <see cref="E:System.Net.Battlefield3.RconClient.ConnectError"/> event.
+            </summary>
+        </member>
+        <member name="P:System.Net.Battlefield3.ConnectErrorEventArgs.Message">
+            <summary>
+            Gets the message for the <see cref="T:System.Net.Sockets.SocketException"/>.
+            </summary>
+        </member>
+        <member name="P:System.Net.Battlefield3.ConnectErrorEventArgs.SocketError">
+            <summary>
+            Gets the <see cref="P:System.Net.Battlefield3.ConnectErrorEventArgs.SocketError"/> code of the <see cref="T:System.Net.Sockets.SocketException"/>.
+            </summary>
+        </member>
+        <member name="T:System.Net.Battlefield3.RawReadEventArgs">
+            <summary>
+            Provides data for the <see cref="E:System.Net.Battlefield3.RconClient.RawRead"/> event.
+            </summary>
+        </member>
+        <member name="P:System.Net.Battlefield3.RawReadEventArgs.Packet">
+            <summary>
+            Gets the <see cref="P:System.Net.Battlefield3.RawReadEventArgs.Packet"/> that was read from the server.
+            </summary>
+            <value>A <see cref="P:System.Net.Battlefield3.RawReadEventArgs.Packet"/> containing data read from the server.</value>
+        </member>
+        <member name="T:System.Net.Battlefield3.PlayerKilledEventArgs">
+            <summary>
+            Provides data for the <see cref="E:System.Net.Battlefield3.RconClient.PlayerKilled"/> event.
+            </summary>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerKilledEventArgs.Victim">
+            <summary>
+            Gets the <see cref="T:System.Net.Battlefield3.Player"/> that was killed.
+            </summary>
+            <value>The <see cref="T:System.Net.Battlefield3.Player"/> that got killed.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerKilledEventArgs.Attacker">
+            <summary>
+            Gets the <see cref="T:System.Net.Battlefield3.Player"/> that did the killing.
+            </summary>
+            <value>The <see cref="T:System.Net.Battlefield3.Player"/> that did the killing.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerKilledEventArgs.Weapon">
+            <summary>
+            Gets the weapon that was used to killed the <see cref="P:System.Net.Battlefield3.PlayerKilledEventArgs.Victim"/>.
+            </summary>
+            <value>The weapon that killed the <see cref="P:System.Net.Battlefield3.PlayerKilledEventArgs.Victim"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerKilledEventArgs.Headshot">
+            <summary>
+            Gets whether or not the kill was a headshot.
+            </summary>
+            <value>True if the kill was a headshot.</value>
+        </member>
+        <member name="T:System.Net.Battlefield3.ResponseEventArgs">
+            <summary>
+            Provides data for the <see cref="E:System.Net.Battlefield3.RconClient.Response"/> event.
+            </summary>
+        </member>
+        <member name="P:System.Net.Battlefield3.ResponseEventArgs.Sequence">
+            <summary>
+            Gets the sequence number of the server's response.
+            </summary>
+            <value>An integer containing the sequence number of the packet.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.ResponseEventArgs.ClientCommand">
+            <summary>
+            Gets the command (first word) the <see cref="T:System.Net.Battlefield3.RconClient"/> originally sent.
+            </summary>
+            <value>A string containing the command/first word the <see cref="T:System.Net.Battlefield3.RconClient"/> originally sent to the server.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.ResponseEventArgs.Words">
+            <summary>
+            Gets the words the server sent.
+            </summary>
+            <value>A read-only string collection containing all of the words the server sent.</value>
+        </member>
+        <member name="T:System.Net.Battlefield3.PlayerAuthenticatedEventArgs">
+            <summary>
+            Provides data for the <see cref="E:System.Net.Battlefield3.RconClient.PlayerAuthenticated"/> event.
+            </summary>
+        </member>
+        <member name="T:System.Net.Battlefield3.LevelLoadedEventArgs">
+            <summary>
+            Provides data for the <see cref="E:System.Net.Battlefield3.RconClient.LevelLoaded"/> event.
+            </summary>
+        </member>
+        <member name="P:System.Net.Battlefield3.LevelLoadedEventArgs.Level">
+            <summary>
+            Gets the level that was loaded.
+            </summary>
+            <value>The level that was loaded.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.LevelLoadedEventArgs.GameMode">
+            <summary>
+            Gets the game mode of the level that was loaded.
+            </summary>
+            <value>The game mode of the level.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.LevelLoadedEventArgs.RoundsPlayed">
+            <summary>
+            Gets the number of rounds that were played.
+            </summary>
+            <value>The number of rounds played.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.LevelLoadedEventArgs.RoundsTotal">
+            <summary>
+            Gets the total number of rounds to be played.
+            </summary>
+            <value>The total number of rounds to be played.</value>
+        </member>
+        <member name="T:System.Net.Battlefield3.PlayerJoiningEventArgs">
+            <summary>
+            Provides data for the <see cref="E:System.Net.Battlefield3.RconClient.PlayerJoining"/> event.
+            </summary>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerJoiningEventArgs.Guid">
+            <summary>
+            Gets the GUID of the joining player.
+            </summary>
+            <value>The GUID of the joining player.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerJoiningEventArgs.Name">
+            <summary>
+            Gets the name of the joining player.
+            </summary>
+            <value>The name of the joining player.</value>
+        </member>
+        <member name="T:System.Net.Battlefield3.MapName">
+            <summary>
+            Defines the maps of Battlefield 3.
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapName.GrandBazaar">
+            <summary>
+            Grand Bazaar
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapName.TehranHighway">
+            <summary>
+            Tehran Highway
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapName.CaspianBorder">
+            <summary>
+            Caspian Border
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapName.SeineCrossing">
+            <summary>
+            Seine Crossing
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapName.OperationFirestorm">
+            <summary>
+            Operation Firestorm
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapName.DamavandPeak">
+            <summary>
+            Damavand Peak
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapName.Canals">
+            <summary>
+            Canals
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapName.KhargIsland">
+            <summary>
+            Kharg Island
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapName.OperationMetro">
+            <summary>
+            Operation Métro
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapName.Unknown">
+            <summary>
+            Unknown
+            </summary>
+        </member>
+        <member name="T:System.Net.Battlefield3.MapMode">
+            <summary>
+            Defines the map modes of Battlefield 3.
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapMode.Unknown">
+            <summary>
+            Unknown
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapMode.Conquest64">
+            <summary>
+            Conquest64
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapMode.Conquest">
+            <summary>
+            Conquest
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapMode.Rush">
+            <summary>
+            Rush
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapMode.SquadRush">
+            <summary>
+            Squad Rush
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapMode.SquadDeathmatch">
+            <summary>
+            Squad Deathmatch
+            </summary>
+        </member>
+        <member name="F:System.Net.Battlefield3.MapMode.TeamDeathmatch">
+            <summary>
+            Team Deathmatch
+            </summary>
+        </member>
+        <member name="T:System.Net.Battlefield3.PlayerCollection">
+            <summary>
+            Contains all of the <see cref="T:System.Net.Battlefield3.Player">Players</see> in the server an <see cref="T:System.Net.Battlefield3.RconClient"/> is connected to.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.PlayerCollection.PlayerExists(System.String)">
+            <summary>
+            Determines if the <see cref="T:System.Net.Battlefield3.Player"/> exists by name.
+            </summary>
+            <param name="name">The name of the <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <returns>True if the <see cref="T:System.Net.Battlefield3.Player"/> is in the <see cref="T:System.Net.Battlefield3.PlayerCollection"/>.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.PlayerCollection.TryGetPlayer(System.String,System.Net.Battlefield3.Player@)">
+            <summary>
+            Gets a <see cref="T:System.Net.Battlefield3.Player"/> by name.
+            </summary>
+            <param name="name">The name of the <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <param name="player">
+            The <see cref="T:System.Net.Battlefield3.Player"/> with the specified name, or null (Nothing in VB)
+            if the <see cref="T:System.Net.Battlefield3.Player"/> wasn't found will, be stored here.
+            </param>
+            <returns>True if the <see cref="T:System.Net.Battlefield3.Player"/> was found.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.PlayerCollection.IndexOf(System.Net.Battlefield3.Player)">
+            <summary>
+            Searches for the specified <see cref="T:System.Net.Battlefield3.Player"/> and returns
+            the zero-based index where the names match within the <see cref="T:System.Net.Battlefield3.PlayerCollection"/>.
+            </summary>
+            <param name="item">The <see cref="T:System.Net.Battlefield3.Player"/> that will be searched for.</param>
+            <returns>The zero-based index where the specified <see cref="T:System.Net.Battlefield3.Player">Player's</see> name matched one
+            in the <see cref="T:System.Net.Battlefield3.PlayerCollection"/>.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.PlayerCollection.Contains(System.Net.Battlefield3.Player)">
+            <summary>
+            Determines whether the specified <see cref="T:System.Net.Battlefield3.Player"/> has the same name
+            as another in the <see cref="T:System.Net.Battlefield3.PlayerCollection"/>.
+            </summary>
+            <param name="item">The <see cref="T:System.Net.Battlefield3.Player"/> to locate in the <see cref="T:System.Net.Battlefield3.PlayerCollection"/>.</param>
+            <returns>True if the specified <see cref="T:System.Net.Battlefield3.Player"/> is in the <see cref="T:System.Net.Battlefield3.PlayerCollection"/>.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.PlayerCollection.CopyTo(System.Net.Battlefield3.Player[],System.Int32)">
+            <summary>
+            Copies the entire <see cref="T:System.Net.Battlefield3.PlayerCollection"/> to a compatible array, starting at the specified index of the target array.
+            </summary>
+            <param name="array">The array that will hold the <see cref="T:System.Net.Battlefield3.Player">Players</see>.</param>
+            <param name="arrayIndex">The zero-based index in the <paramref name="array"/> where copying will begin.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.PlayerCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the <see cref="T:System.Net.Battlefield3.PlayerCollection"/>.
+            </summary>
+            <returns>An IEnumerator(Player) that iterates through the <see cref="T:System.Net.Battlefield3.PlayerCollection"/>.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.PlayerCollection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the <see cref="T:System.Net.Battlefield3.PlayerCollection"/>.
+            </summary>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerator`1">IEnumerator(Player)</see> that iterates through the <see cref="T:System.Net.Battlefield3.PlayerCollection"/>.</returns>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerCollection.Item(System.Int32)">
+            <summary>
+            Gets the <see cref="T:System.Net.Battlefield3.Player"/> at the specified index in the <see cref="T:System.Net.Battlefield3.PlayerCollection"/>.
+            </summary>
+            <param name="index">The index of the <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <returns>The <see cref="T:System.Net.Battlefield3.Player"/> at the specified index or null if the request times out.</returns>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerCollection.Item(System.String)">
+            <summary>
+            Gets the <see cref="T:System.Net.Battlefield3.Player"/> with the matching name.
+            </summary>
+            <param name="name">The name of the <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <returns>A <see cref="T:System.Net.Battlefield3.Player"/> with a matching name or null if the request times out.</returns>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerCollection.Count">
+            <summary>
+            Gets the number of <see cref="T:System.Net.Battlefield3.Player">Players</see> in the <see cref="T:System.Net.Battlefield3.PlayerCollection"/>.
+            </summary>
+            <value>
+            The number of <see cref="T:System.Net.Battlefield3.Player">Players</see> in the <see cref="T:System.Net.Battlefield3.PlayerCollection"/>
+            or -1 if the request times out.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerCollection.IsReadOnly">
+            <summary>
+            Gets whether or not the <see cref="T:System.Net.Battlefield3.PlayerCollection"/> is read-only.
+            </summary>
+            <value>True because only the <see cref="T:System.Net.Battlefield3.RconClient"/> may modify a <see cref="T:System.Net.Battlefield3.PlayerCollection"/>.</value>
+        </member>
+        <member name="T:System.Net.Battlefield3.DisconnectedEventArgs">
+            <summary>
+            Provides data for the <see cref="E:System.Net.Battlefield3.RconClient.Disconnected"/> event.
+            </summary>
+        </member>
+        <member name="P:System.Net.Battlefield3.DisconnectedEventArgs.Message">
+            <summary>
+            Gets the message for the <see cref="T:System.Net.Sockets.SocketException"/>.
+            </summary>
+        </member>
+        <member name="P:System.Net.Battlefield3.DisconnectedEventArgs.SocketError">
+            <summary>
+            Gets the <see cref="P:System.Net.Battlefield3.DisconnectedEventArgs.SocketError"/> code of the <see cref="T:System.Net.Sockets.SocketException"/>.
+            </summary>
+        </member>
+        <member name="T:System.Net.Battlefield3.SquadPlayerSubset">
+            <summary>
+            This <see cref="T:System.Net.Battlefield3.PlayerSubset"/> refers to all players on a specific team and squad in the server.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.SquadPlayerSubset.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Creates a new <see cref="T:System.Net.Battlefield3.SquadPlayerSubset"/>
+            </summary>
+            <param name="team">The target team of the <see cref="T:System.Net.Battlefield3.SquadPlayerSubset"/>.</param>
+            <param name="squad">The squad team of the <see cref="T:System.Net.Battlefield3.SquadPlayerSubset"/>.</param>
+        </member>
+        <member name="P:System.Net.Battlefield3.SquadPlayerSubset.Team">
+            <summary>
+            Gets the team of the <see cref="T:System.Net.Battlefield3.SquadPlayerSubset"/>.
+            </summary>
+            <value>The team of the <see cref="T:System.Net.Battlefield3.SquadPlayerSubset"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.SquadPlayerSubset.Squad">
+            <summary>
+            Gets the squad of the <see cref="T:System.Net.Battlefield3.SquadPlayerSubset"/>.
+            </summary>
+            <value>The squad of the <see cref="T:System.Net.Battlefield3.SquadPlayerSubset"/>.</value>
+        </member>
+        <member name="T:System.Net.Battlefield3.Packet">
+            <summary>
+            Represents an RCON protocol packet.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.ToByteArray">
+            <summary>
+            Converts the <see cref="T:System.Net.Battlefield3.Packet"/> into its encoded form.
+            </summary>
+            <returns>A byte array containing the <see cref="T:System.Net.Battlefield3.Packet"/>.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.#ctor">
+            <summary>
+            Creates a blank instance of <see cref="T:System.Net.Battlefield3.Packet"/>.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.#ctor(System.Collections.Generic.IEnumerable{System.Byte},System.Collections.Generic.List{System.Byte})">
+            <summary>
+            Creates an instance of <see cref="T:System.Net.Battlefield3.Packet"/>.
+            </summary>
+            <param name="data">A raw <see cref="T:System.Net.Battlefield3.Packet"/> that is to be loaded.</param>
+            <param name="leftoverData">The data the packet didn't use.</param>
+            <remarks>Enough room is kept in <paramref name="leftoverData"/> for another read by RconClient.</remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.#ctor(System.Boolean,System.Boolean,System.Int32,System.String[])">
+            <summary>
+            Creates an instance of <see cref="T:System.Net.Battlefield3.Packet"/>.
+            </summary>
+            <param name="isFromServer">Whether or not the packet originates from the server.</param>
+            <param name="isResponse">Whether or not the packet is a response to another one.</param>
+            <param name="sequence">The sequence number of the packet.</param>
+            <param name="words">The <see cref="T:System.Net.Battlefield3.Packet">Packet's</see> words.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.#ctor(System.Net.Battlefield3.Header,System.String[])">
+            <summary>
+            Creates an instance of <see cref="T:System.Net.Battlefield3.Packet"/>.
+            </summary>
+            <param name="header">The header of the <see cref="T:System.Net.Battlefield3.Packet"/>.</param>
+            <param name="words">The <see cref="T:System.Net.Battlefield3.Packet">Packet's</see> words.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.#ctor(System.Net.Battlefield3.Header)">
+            <summary>
+            Creates an instance of <see cref="T:System.Net.Battlefield3.Packet"/>.
+            </summary>
+            <param name="header">The <see cref="P:System.Net.Battlefield3.Packet.Header"/> of the <see cref="T:System.Net.Battlefield3.Packet"/>.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.ToInt32(System.Int32)">
+            <summary>
+            Converts an integer into bytes.
+            </summary>
+            <param name="num">The target integer.</param>
+            <returns>A byte array containing an integer.</returns>
+            <remarks>This method is here to imitate the python scripts.</remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.DecodeInt32(System.Collections.Generic.List{System.Byte},System.Int32)">
+            <summary>
+            Converts a byte list into an integer.
+            </summary>
+            <param name="bytes">The target byte list.</param>
+            <param name="offset">The zero-index offset at which to start in the byte array.</param>
+            <returns>An integer containing the value in the byte array.</returns>
+            <remarks>This method is here to imitate the python scripts, to an extent.</remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.DecodeInt32(System.Byte[],System.Int32)">
+            <summary>
+            Converts a byte array into an integer.
+            </summary>
+            <param name="bytes">The target byte array.</param>
+            <param name="offset">The zero-index offset at which to start in the byte array.</param>
+            <returns>An integer containing the value in the byte array.</returns>
+            <remarks>This method is here to imitate the python scripts, to an extent.</remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.EncodeHeader(System.Boolean,System.Boolean,System.Int32)">
+            <summary>
+            Encodes the header of a packet.
+            </summary>
+            <param name="isFromServer">Whether or not the packet originates from the server.</param>
+            <param name="isResponse">Whether or not the packet is a response to another one.</param>
+            <param name="sequence">The sequence number of the packet.</param>
+            <returns>A byte array containing the encoded header.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.DecodeHeader(System.Collections.Generic.List{System.Byte})">
+            <summary>
+            Decodes the header of an encoded header.
+            </summary>
+            <param name="data">The raw data of the header or packet.</param>
+            <returns>A <see cref="P:System.Net.Battlefield3.Packet.Header"/> object containing the values in the header.</returns>
+            <remarks>The raw data for the header or packet can be supplied.</remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.EncodeWords(System.Collections.Generic.List{System.String})">
+            <summary>
+            Encodes the words of a packet into a byte list.
+            </summary>
+            <param name="words">The words that are to be encoded.</param>
+            <returns>A byte array containing the number of words and the encoded words.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.DecodeWords(System.Collections.Generic.List{System.Byte},System.Int32,System.Int32)">
+            <summary>
+            Decodes the words that have been encoded.
+            </summary>
+            <param name="data">The raw data of the words or packet.</param>
+            <param name="numberOfWords">Optional. The number of words in a packet.</param>
+            <param name="offset">The zero-index of where to begin decoding. If a packet is specified for
+            <paramref name="data"/>, then offset should be 12.</param>
+            <returns>A string array containing the decoded words.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.EncodePacket(System.Boolean,System.Boolean,System.Int32,System.Collections.Generic.List{System.String})">
+            <summary>
+            Encodes a packet into raw data.
+            </summary>
+            <param name="isFromServer">Whether or not the packet originates from the server.</param>
+            <param name="isResponse">Whether or not the packet is a response to another one.</param>
+            <param name="sequence">The sequence number of the packet.</param>
+            <param name="words">The packet's words.</param>
+            <returns>A byte array containing a packet.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.EncodePacket(System.Net.Battlefield3.Header,System.Collections.Generic.List{System.String})">
+            <summary>
+            Encodes a packet into raw data.
+            </summary>
+            <param name="header">The header of the packet.</param>
+            <param name="words">The packet's words.</param>
+            <returns>A byte array containing a packet.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.EncodePacket(System.Net.Battlefield3.Packet)">
+            <summary>
+            Encodes a packet into raw data.
+            </summary>
+            <param name="packet">The packet that is to be encoded.</param>
+            <returns>A byte array containing a packet.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.DecodePacket(System.Collections.Generic.List{System.Byte},System.Collections.Generic.List{System.Byte})">
+            <summary>
+            Decodes a packet from raw data and also gives the data not needed by the packet.
+            </summary>
+            <param name="data">The data that is to be decoded.</param>
+            <param name="leftoverData">The leftover data that will be part of another packet.</param>
+            <returns>
+            A <see cref="T:System.Net.Battlefield3.Packet"/> containing the decoded data or null (Nothing in VB) if
+            a complete packet wasn't contained in the <paramref name="data"/>.
+            </returns>
+            <remarks>
+            It is possible that the leftover data contains another whole packet.<para/>
+            If there is not a complete packet in <paramref name="data"/>, then <paramref name="leftoverData"/>
+            will contain all of the <paramref name="data"/>.
+            </remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.Packet.ContainsCompletePacket(System.Collections.Generic.List{System.Byte})">
+            <summary>
+            Determines whether the raw data contains a complete packet.
+            </summary>
+            <param name="data">The data that is to be inspected.</param>
+            <returns>True if the <paramref name="data"/> contains a complete packet.</returns>
+        </member>
+        <member name="P:System.Net.Battlefield3.Packet.Header">
+            <summary>
+            Gets or sets the <see cref="P:System.Net.Battlefield3.Packet.Header"/> of the <see cref="T:System.Net.Battlefield3.Packet"/>.
+            </summary>
+            <value>The <see cref="P:System.Net.Battlefield3.Packet.Header"/> of the <see cref="T:System.Net.Battlefield3.Packet"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Packet.IsFromServer">
+            <summary>
+            Gets or sets whether or not the <see cref="T:System.Net.Battlefield3.Packet"/> was sent by the server.
+            </summary>
+            <value>True if the <see cref="T:System.Net.Battlefield3.Packet"/> was sent by the server.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Packet.IsResponse">
+            <summary>
+            Gets or sets whether or not the <see cref="T:System.Net.Battlefield3.Packet"/> is responding to another <see cref="T:System.Net.Battlefield3.Packet"/>.
+            </summary>
+            <value>True if the <see cref="T:System.Net.Battlefield3.Packet"/> is responding to another <see cref="T:System.Net.Battlefield3.Packet"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Packet.Sequence">
+            <summary>
+            Gets or sets the number uniquely identifying the <see cref="T:System.Net.Battlefield3.Packet"/> or set of <see cref="T:System.Net.Battlefield3.Packet">Packets</see>.
+            </summary>
+            <value>An integer uniquely identifying the <see cref="T:System.Net.Battlefield3.Packet"/>.</value>
+            <remarks>
+            If <see cref="P:System.Net.Battlefield3.Packet.IsResponse"/> is true, the <see cref="P:System.Net.Battlefield3.Packet.Sequence"/> will match that of an original <see cref="T:System.Net.Battlefield3.Packet"/>.<para/>
+            For instance, when sending a command to get player data, the server will respond with the same <see cref="P:System.Net.Battlefield3.Packet.Sequence"/>.
+            </remarks>
+        </member>
+        <member name="P:System.Net.Battlefield3.Packet.Words">
+            <summary>
+            Gets or sets the word list of the <see cref="T:System.Net.Battlefield3.Packet"/>.
+            </summary>
+            <value>The words of the <see cref="T:System.Net.Battlefield3.Packet"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Packet.NumberOfBytes">
+            <summary>
+            Gets the number of bytes of the <see cref="T:System.Net.Battlefield3.Packet"/>.
+            </summary>
+            <returns>An integer value indicating the number of bytes in the <see cref="T:System.Net.Battlefield3.Packet"/>.</returns>
+        </member>
+        <member name="T:System.Net.Battlefield3.PlayerKickedEventArgs">
+            <summary>
+            Provides data for the <see cref="!:RconClient.PlayerKicked"/> event.
+            </summary>
+        </member>
+        <member name="P:System.Net.Battlefield3.PlayerKickedEventArgs.Reason">
+            <summary>
+            Gets the reason the <see cref="T:System.Net.Battlefield3.Player"/> was kicked.
+            </summary>
+            <value>The reason the <see cref="T:System.Net.Battlefield3.Player"/> was kicked.</value>
+        </member>
+        <member name="T:System.Net.Battlefield3.AllPlayerSubset">
+            <summary>
+            This <see cref="T:System.Net.Battlefield3.PlayerSubset"/> refers to all players in the server.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.AllPlayerSubset.#ctor">
+            <summary>
+            Creates a new <see cref="T:System.Net.Battlefield3.AllPlayerSubset"/>.
+            </summary>
+        </member>
+        <member name="T:System.Net.Battlefield3.NamePlayerSubset">
+            <summary>
+            This <see cref="T:System.Net.Battlefield3.PlayerSubset"/> refers to a <see cref="P:System.Net.Battlefield3.NamePlayerSubset.Player"/> with a specific name on the server.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.NamePlayerSubset.#ctor(System.Net.Battlefield3.Player)">
+            <summary>
+            Creates a new <see cref="T:System.Net.Battlefield3.SquadPlayerSubset"/>
+            </summary>
+            <param name="player">The target player of the <see cref="T:System.Net.Battlefield3.SquadPlayerSubset"/>.</param>
+        </member>
+        <member name="P:System.Net.Battlefield3.NamePlayerSubset.Player">
+            <summary>
+            Gets the <see cref="T:System.Net.Battlefield3.Player"/> of the <see cref="T:System.Net.Battlefield3.NamePlayerSubset"/>.
+            </summary>
+            <value>The <see cref="T:System.Net.Battlefield3.Player"/> of the <see cref="T:System.Net.Battlefield3.NamePlayerSubset"/>.</value>
+        </member>
+        <member name="T:System.Net.Battlefield3.Player">
+            <summary>
+            Contains data regarding players in a Battlefield 3 server.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.ChangeSquad(System.Int32,System.Int32,System.Boolean)">
+            <summary>
+            Changes the squad and team of the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <param name="team">The new team of the <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <param name="squad">The new squad of the <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <param name="forceKill">If true, forces the <see cref="T:System.Net.Battlefield3.Player"/> to die before switching.</param>
+            <remarks>
+            This method will fail if <paramref name="forceKill"/> is false and the <see cref="T:System.Net.Battlefield3.Player"/> is alive.
+            </remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.ChangeSquad(System.Int32,System.Int32)">
+            <summary>
+            Changes the squad and team of the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <param name="team">The new team of the <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <param name="squad">The new squad of the <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <remarks>
+            This method will kill the <see cref="T:System.Net.Battlefield3.Player"/> to ensure success.
+            </remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.ChangeSquad(System.Int32,System.Boolean)">
+            <summary>
+            Changes the squad of the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <param name="squad">The new squad of the <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <param name="forceKill">If true, forces the <see cref="T:System.Net.Battlefield3.Player"/> to die before switching.</param>
+            <remarks>
+            This method will fail if <paramref name="forceKill"/> is false and the <see cref="T:System.Net.Battlefield3.Player"/> is alive.
+            </remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.ChangeSquad(System.Int32)">
+            <summary>
+            Changes the squad of the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <param name="squad">The new squad of the <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <remarks>
+            This method will kill the <see cref="T:System.Net.Battlefield3.Player"/> to ensure success.
+            </remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.ChangeTeam(System.Int32,System.Boolean)">
+            <summary>
+            Changes the team of the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <param name="team">The new team of the <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <param name="forceKill">If true, forces the <see cref="T:System.Net.Battlefield3.Player"/> to die before switching.</param>
+            <remarks>
+            This method will fail if <paramref name="forceKill"/> is false and the <see cref="T:System.Net.Battlefield3.Player"/> is alive.
+            </remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.ChangeTeam(System.Int32)">
+            <summary>
+            Changes the team of the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <param name="team">The new teams of the <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <remarks>
+            This method will kill the <see cref="T:System.Net.Battlefield3.Player"/> to ensure success.
+            </remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.Kill">
+            <summary>
+            Kills the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.Kick">
+            <summary>
+            Kicks the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.Kick(System.String)">
+            <summary>
+            Kicks the <see cref="T:System.Net.Battlefield3.Player"/> with the specified <paramref name="reason"/>.
+            </summary>
+            <param name="reason">The reason to kick the <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.PermanentBan">
+            <summary>
+            Bans the <see cref="T:System.Net.Battlefield3.Player"/> permanently.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.PermanentBan(System.Net.Battlefield3.BanTargetType)">
+            <summary>
+            Bans the <see cref="T:System.Net.Battlefield3.Player"/> permanently by the specified <see cref="T:System.Net.Battlefield3.BanTargetType"/>.
+            </summary>
+            <param name="target">What part of the <see cref="T:System.Net.Battlefield3.Player"/> will be banned.</param>
+            <remarks>
+            The IP address of a <see cref="T:System.Net.Battlefield3.Player"/> will only be available when PunkBuster sends it.
+            </remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.RoundBan(System.Int32)">
+            <summary>
+            Bans the <see cref="T:System.Net.Battlefield3.Player"/> for a round.
+            </summary>
+            <param name="rounds">The number of rounds to ban the <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.RoundBan(System.Int32,System.Net.Battlefield3.BanTargetType)">
+            <summary>
+            Bans the <see cref="T:System.Net.Battlefield3.Player"/> for a round by the specified <see cref="T:System.Net.Battlefield3.BanTargetType"/>.
+            </summary>
+            <param name="rounds">The number of rounds to ban the <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <param name="target">What part of the <see cref="T:System.Net.Battlefield3.Player"/> will be banned.</param>
+            <remarks>
+            The IP address of a <see cref="T:System.Net.Battlefield3.Player"/> will only be available when PunkBuster sends it.
+            </remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.TemporaryBan(System.Int32)">
+            <summary>
+            Temporarily bans the <see cref="T:System.Net.Battlefield3.Player"/> for the specified number of seconds.
+            </summary>
+            <param name="seconds">The number of seconds the <see cref="T:System.Net.Battlefield3.Player"/> will be banned.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.TemporaryBan(System.Net.Battlefield3.BanTargetType,System.Int32)">
+            <summary>
+            Temporarily bans the <see cref="T:System.Net.Battlefield3.Player"/> for the specified number of seconds.
+            </summary>
+            <param name="target">What part of the <see cref="T:System.Net.Battlefield3.Player"/> will be banned.</param>
+            <param name="seconds">The number of seconds the <see cref="T:System.Net.Battlefield3.Player"/> will be banned.</param>
+            <remarks>
+            The IP address of a <see cref="T:System.Net.Battlefield3.Player"/> will only be available when PunkBuster sends it.
+            </remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.ToString">
+            <summary>
+            Converts the value of this instance to it's equivalent string representation (<see cref="P:System.Net.Battlefield3.Player.Name"/>).
+            </summary>
+            <returns>The <see cref="P:System.Net.Battlefield3.Player.Name"/> of the <see cref="T:System.Net.Battlefield3.Player"/>.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.GetHashCode">
+            <summary>
+            Returns the hash code of this <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <returns>An integer value specifying the hash value for this <see cref="T:System.Net.Battlefield3.Player"/>.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.Equals(System.Object)">
+            <summary>
+            Specifies whether this <see cref="T:System.Net.Battlefield3.Player"/> is the same as the specified object.
+            </summary>
+            <param name="obj">The object to test.</param>
+            <returns>True if this <see cref="T:System.Net.Battlefield3.Player"/> is the same as the object.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.op_Equality(System.Net.Battlefield3.Player,System.Net.Battlefield3.Player)">
+            <summary>
+            Compares two <see cref="T:System.Net.Battlefield3.Player"/> objects.
+            </summary>
+            <param name="firstPlayer">The first <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <param name="secondPlayer">The second <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <returns>True if both players have the same name.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.op_Inequality(System.Net.Battlefield3.Player,System.Net.Battlefield3.Player)">
+            <summary>
+            Compares two <see cref="T:System.Net.Battlefield3.Player"/> objects.
+            </summary>
+            <param name="firstPlayer">The first <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <param name="secondPlayer">The second <see cref="T:System.Net.Battlefield3.Player"/>.</param>
+            <returns>True if both players do not have the same name.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Player.Equals(System.Net.Battlefield3.Player)">
+            <summary>
+            Specifies whether this <see cref="T:System.Net.Battlefield3.Player"/> is the same as the specified <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <param name="other">The <see cref="T:System.Net.Battlefield3.Player"/> to test.</param>
+            <returns>True if this <see cref="T:System.Net.Battlefield3.Player"/> is the same as the other <see cref="T:System.Net.Battlefield3.Player"/>.</returns>
+        </member>
+        <member name="P:System.Net.Battlefield3.Player.Parent">
+            <summary>
+            Gets the parent <see cref="T:System.Net.Battlefield3.RconClient"/> of the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <value>The parent <see cref="T:System.Net.Battlefield3.RconClient"/> of the <see cref="T:System.Net.Battlefield3.Player"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Player.Item(System.String)">
+            <summary>
+            Gets a <see cref="T:System.Net.Battlefield3.Player"/> property as defined in the RCON documentation.
+            </summary>
+            <param name="property">The name of the property.</param>
+            <returns>The property as a string.</returns>
+            <remarks>
+            The casing of <paramref name="property"/> must match the casing in the RCON documentation.
+            </remarks>
+        </member>
+        <member name="P:System.Net.Battlefield3.Player.Name">
+            <summary>
+            Gets the name of the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <value>A string containing the name of the <see cref="T:System.Net.Battlefield3.Player"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Player.Guid">
+            <summary>
+            Gets the GUID of the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <value>A string containing the GUID of the <see cref="T:System.Net.Battlefield3.Player"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Player.TeamId">
+            <summary>
+            Gets the team of the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <value>An integer containing the team of the <see cref="T:System.Net.Battlefield3.Player"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Player.SquadId">
+            <summary>
+            Gets the squad of the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <value>An integer containing the squad of the <see cref="T:System.Net.Battlefield3.Player"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Player.Kills">
+            <summary>
+            Gets the number of kills of the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <value>An integer containing the number of kills of the <see cref="T:System.Net.Battlefield3.Player"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Player.Deaths">
+            <summary>
+            Gets the number of deaths of the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <value>An integer containing the number of deaths of the <see cref="T:System.Net.Battlefield3.Player"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Player.Score">
+            <summary>
+            Gets the score of the <see cref="T:System.Net.Battlefield3.Player"/>.
+            </summary>
+            <value>An integer containing the score of the player.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Player.IPAddress">
+            <summary>
+            Gets the IP address of the <see cref="T:System.Net.Battlefield3.Player"/>, if available.
+            </summary>
+            <value>The IP address of the <see cref="T:System.Net.Battlefield3.Player"/> or <see cref="F:System.String.Empty"/> if not available.</value>
+            <remarks>
+            The IP address is parsed from PunkBuster, rather than the player list, so it is possible the IP address
+            won't be available upon request.
+            </remarks>
+        </member>
+        <member name="T:System.Net.Battlefield3.MapCollection">
+            <summary>
+            Provides a wrapper around RCON's maplist functionality, allowing enumeration and manipulation of the maplist, as 
+            well as the ability to end and change rounds and set the next map.
+            </summary>
+            <remarks>
+            For comparison operations, such as <see cref="M:System.Net.Battlefield3.MapCollection.Contains(System.Net.Battlefield3.Map)"/>, <see cref="T:System.Net.Battlefield3.Map">Maps</see> will match when their 
+            <see cref="P:System.Net.Battlefield3.Map.Name"/> and <see cref="P:System.Net.Battlefield3.Map.Mode"/> match.
+            </remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.MapCollection.SetNextMap(System.Int32)">
+            <summary>
+            Sets the next <see cref="T:System.Net.Battlefield3.Map"/> in the <see cref="T:System.Net.Battlefield3.MapCollection"/>.
+            </summary>
+            <param name="index">The zero-based index of the next <see cref="T:System.Net.Battlefield3.Map"/>.</param>
+            <returns>True if the request succeeds or false if the request times out or request fails.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.MapCollection.RunNextRound">
+            <summary>
+            The <see cref="T:System.Net.Battlefield3.Map"/> is changed to the next round. If the last round is the one being skipped, the <see cref="T:System.Net.Battlefield3.Map"/>
+            is changed.
+            </summary>
+            <returns>True if the request succeeds or false if the request times out or request fails.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.MapCollection.RestartRound">
+            <summary>
+            Restarts the current round.
+            </summary>
+            <returns>True if the request succeeds or false if the request times out of request fails.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.MapCollection.EndRound(System.Int32)">
+            <summary>
+            Ends the round, with the specified <paramref name="team"/> winning.
+            </summary>
+            <param name="team">The team that will win the round.</param>
+            <returns>True if the request succeeds or false if the request times out or request fails.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.MapCollection.IndexOf(System.Net.Battlefield3.Map)">
+            <summary>
+            Gets the index of the <see cref="T:System.Net.Battlefield3.MapCollection"/>-made <see cref="T:System.Net.Battlefield3.Map"/>,
+            or searches for the specified <see cref="T:System.Net.Battlefield3.Map"/> and returns
+            the zero-based index where the <see cref="T:System.Net.Battlefield3.Map">Map's</see> <see cref="P:System.Net.Battlefield3.Map.Name"/> and <see cref="P:System.Net.Battlefield3.Map.Mode"/> 
+            match within the <see cref="T:System.Net.Battlefield3.MapCollection"/>.
+            </summary>
+            <param name="item">The <see cref="T:System.Net.Battlefield3.Map"/> that will be searched for.</param>
+            <returns>The zero-based index where the <see cref="T:System.Net.Battlefield3.Map">Map's</see> <see cref="P:System.Net.Battlefield3.Map.Name"/> and 
+            <see cref="P:System.Net.Battlefield3.Map.Mode"/> match within the <see cref="T:System.Net.Battlefield3.MapCollection"/> or -1 if the request times out.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.MapCollection.Insert(System.Int32,System.Net.Battlefield3.Map)">
+            <summary>
+            Inserts the <see cref="T:System.Net.Battlefield3.Map"/> into the maplist at the specified <paramref name="index"/>.
+            </summary>
+            <param name="index">The zero-based index at which the <see cref="T:System.Net.Battlefield3.Map"/> should be inserted.</param>
+            <param name="item">The <see cref="T:System.Net.Battlefield3.Map"/> that is to be inserted.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.MapCollection.RemoveAt(System.Int32)">
+            <summary>
+            Removed the <see cref="T:System.Net.Battlefield3.Map"/> at the specified <paramref name="index"/> from the <see cref="T:System.Net.Battlefield3.MapCollection"/>.
+            </summary>
+            <param name="index">The zero-based index of the <see cref="T:System.Net.Battlefield3.Map"/> to remove.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.MapCollection.Add(System.Net.Battlefield3.Map)">
+            <summary>
+            Adds a <see cref="T:System.Net.Battlefield3.Map"/> to the end of the <see cref="T:System.Net.Battlefield3.MapCollection"/>.
+            </summary>
+            <param name="item">The <see cref="T:System.Net.Battlefield3.Map"/> to be added to the end of the <see cref="T:System.Net.Battlefield3.MapCollection"/>.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.MapCollection.Clear">
+            <summary>
+            Removes all <see cref="T:System.Net.Battlefield3.Map">Maps</see> from the <see cref="T:System.Net.Battlefield3.MapCollection"/>.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.MapCollection.Contains(System.Net.Battlefield3.Map)">
+            <summary>
+            Determines whether a <see cref="T:System.Net.Battlefield3.Map"/> is in the maplist
+            </summary>
+            <param name="item">The <see cref="T:System.Net.Battlefield3.Map"/> to locate in the maplist.</param>
+            <returns>True if the <see cref="T:System.Net.Battlefield3.Map">Map's</see> <see cref="P:System.Net.Battlefield3.Map.Name"/> and 
+            <see cref="P:System.Net.Battlefield3.Map.Mode"/> match within the <see cref="T:System.Net.Battlefield3.MapCollection"/> or returns false if the request times out.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.MapCollection.Remove(System.Net.Battlefield3.Map)">
+            <summary>
+            Removes the <see cref="T:System.Net.Battlefield3.Map"/> from the <see cref="T:System.Net.Battlefield3.MapCollection"/>.
+            </summary>
+            <param name="item">The <see cref="T:System.Net.Battlefield3.Map"/> to be removed.</param>
+            <returns>
+            True if the removal succeeds or false if the <see cref="T:System.Net.Battlefield3.Map"/> did not come from the <see cref="T:System.Net.Battlefield3.MapCollection"/>
+            and the query to find a matching <see cref="T:System.Net.Battlefield3.Map"/> failed.
+            </returns>
+            <remarks>
+            If the <see cref="T:System.Net.Battlefield3.Map"/> came from the <see cref="T:System.Net.Battlefield3.MapCollection"/>, each <see cref="T:System.Net.Battlefield3.Map"/> stores its index 
+            (note that the index could change after a period of time if modified outside of the original
+            <see cref="T:System.Net.Battlefield3.RconClient"/>). In this case, the stored index is used. If the index does not exist, the first 
+            occurrence of a matching <see cref="T:System.Net.Battlefield3.Map"/> is used.
+            </remarks>
+        </member>
+        <member name="M:System.Net.Battlefield3.MapCollection.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the <see cref="T:System.Net.Battlefield3.MapCollection"/>.
+            </summary>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerator`1">IEnumerator(Map)</see> that iterates through the <see cref="T:System.Net.Battlefield3.MapCollection"/>.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.MapCollection.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the <see cref="T:System.Net.Battlefield3.MapCollection"/>.
+            </summary>
+            <returns>An <see cref="T:System.Collections.IEnumerator"/> that iterates through the <see cref="T:System.Net.Battlefield3.MapCollection"/>.</returns>
+        </member>
+        <member name="P:System.Net.Battlefield3.MapCollection.Item(System.Int32)">
+            <summary>
+            Gets the <see cref="T:System.Net.Battlefield3.Map"/> at the specified <paramref name="index"/>.
+            </summary>
+            <param name="index">The zero-based index of the <see cref="T:System.Net.Battlefield3.Map"/> to get.</param>
+            <returns>The <see cref="T:System.Net.Battlefield3.Map"/> at that index or null if the query timed out.</returns>
+        </member>
+        <member name="P:System.Net.Battlefield3.MapCollection.NextMap">
+            <summary>
+            Gets or sets the next <see cref="T:System.Net.Battlefield3.Map"/> in the <see cref="T:System.Net.Battlefield3.MapCollection"/>.
+            </summary>
+            <value>The next <see cref="T:System.Net.Battlefield3.Map"/>.</value>
+            <remarks>
+            When setting the next <see cref="T:System.Net.Battlefield3.Map"/>, only <see cref="T:System.Net.Battlefield3.Map">Maps</see> created by the same
+            <see cref="T:System.Net.Battlefield3.MapCollection"/> can be used.
+            </remarks>
+        </member>
+        <member name="P:System.Net.Battlefield3.MapCollection.CurrentMap">
+            <summary>
+            Gets the current <see cref="T:System.Net.Battlefield3.Map"/>.
+            </summary>
+            <value>The current <see cref="T:System.Net.Battlefield3.Map"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.MapCollection.Count">
+            <summary>
+            Gets the number of <see cref="T:System.Net.Battlefield3.Map">Maps</see> in the <see cref="T:System.Net.Battlefield3.MapCollection"/>.
+            </summary>
+            <value>The number of <see cref="T:System.Net.Battlefield3.Map">Maps</see> in the <see cref="T:System.Net.Battlefield3.MapCollection"/> or -1 if the request times out.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.MapCollection.IsReadOnly">
+            <summary>
+            Gets whether or not the <see cref="T:System.Net.Battlefield3.MapCollection"/> is read-only.
+            </summary>
+            <value>True if <see cref="P:System.Net.Battlefield3.RconClient.IsLoggedOn"/> is true.</value>
+        </member>
+        <member name="T:System.Net.Battlefield3.Map">
+            <summary>
+            Represents an entry in a server's maplist, containing the map, mode, and rounds.
+            </summary>
+        </member>
+        <member name="M:System.Net.Battlefield3.Map.#ctor(System.Net.Battlefield3.MapName,System.Net.Battlefield3.MapMode,System.Int32)">
+            <summary>
+            Create a new <see cref="T:System.Net.Battlefield3.Map"/> that can be added to <see cref="P:System.Net.Battlefield3.RconClient.Maps"/>.
+            </summary>
+            <param name="name">The name of the <see cref="T:System.Net.Battlefield3.Map"/>.</param>
+            <param name="mode">The mode of the <see cref="T:System.Net.Battlefield3.Map"/>.</param>
+            <param name="rounds">The total rounds to be played on the <see cref="T:System.Net.Battlefield3.Map"/>.</param>
+        </member>
+        <member name="M:System.Net.Battlefield3.Map.Equals(System.Net.Battlefield3.Map)">
+            <summary>
+            Specifies whether this <see cref="T:System.Net.Battlefield3.Map"/> is the same as the specified <see cref="T:System.Net.Battlefield3.Map"/>.
+            </summary>
+            <param name="other">The <see cref="T:System.Net.Battlefield3.Map"/> to test.</param>
+            <returns>True if this <see cref="T:System.Net.Battlefield3.Map"/> is the same as the other <see cref="T:System.Net.Battlefield3.Map"/> by 
+            <see cref="P:System.Net.Battlefield3.Map.Name"/> and <see cref="P:System.Net.Battlefield3.Map.Mode"/>.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Map.Equals(System.Object)">
+            <summary>
+            Specifies whether this <see cref="T:System.Net.Battlefield3.Map"/> is the same as the specified object.
+            </summary>
+            <param name="obj">The object to test.</param>
+            <returns>True if this <see cref="T:System.Net.Battlefield3.Map"/> is the same as the object.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Map.GetHashCode">
+            <summary>
+            Returns the hash code of this <see cref="T:System.Net.Battlefield3.Map"/>.
+            </summary>
+            <returns>An integer value specifying the hash value for this <see cref="T:System.Net.Battlefield3.Map"/>.</returns>
+        </member>
+        <member name="M:System.Net.Battlefield3.Map.ToString">
+            <summary>
+            Converts the value of this instance to it's equivalent string representation <para/>
+            (<see cref="P:System.Net.Battlefield3.Map.FriendlyName"/>, <see cref="P:System.Net.Battlefield3.Map.FriendlyMode"/> <see cref="P:System.Net.Battlefield3.Map.CurrentRound"/>/<see cref="P:System.Net.Battlefield3.Map.TotalRounds"/>).
+            </summary>
+            <returns>The string representation of the <see cref="T:System.Net.Battlefield3.Player"/>.</returns>
+        </member>
+        <member name="P:System.Net.Battlefield3.Map.Name">
+            <summary>
+            Gets the name of the <see cref="T:System.Net.Battlefield3.Map"/>.
+            </summary>
+            <value>The <see cref="T:System.Net.Battlefield3.MapName"/> of the <see cref="T:System.Net.Battlefield3.Map"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Map.FriendlyName">
+            <summary>
+            Gets the friendly, human-readable name of the <see cref="T:System.Net.Battlefield3.Map"/>.
+            </summary>
+            <value>The human-readable name of the <see cref="T:System.Net.Battlefield3.Map"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Map.RawName">
+            <summary>
+            Gets the raw name of the <see cref="T:System.Net.Battlefield3.Map"/> that the server understands.
+            </summary>
+            <value>The raw name of the <see cref="T:System.Net.Battlefield3.Map"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Map.Mode">
+            <summary>
+            Gets the gamemode of the <see cref="T:System.Net.Battlefield3.Map"/>.
+            </summary>
+            <value>The <see cref="T:System.Net.Battlefield3.MapMode"/> of the <see cref="T:System.Net.Battlefield3.Map"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Map.FriendlyMode">
+            <summary>
+            Gets the friendly, human-readable gamemode of the <see cref="T:System.Net.Battlefield3.Map"/>.
+            </summary>
+            <value>The human-readable gamemode of the <see cref="T:System.Net.Battlefield3.Map"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Map.RawMode">
+            <summary>
+            Gets the raw gamemode of the <see cref="T:System.Net.Battlefield3.Map"/> that the server understands.
+            </summary>
+            <value>The raw gamemode of the <see cref="T:System.Net.Battlefield3.Map"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Map.TotalRounds">
+            <summary>
+            Gets the total rounds to be played for the <see cref="T:System.Net.Battlefield3.Map"/>.
+            </summary>
+            <value>The total number of rounds to be played on the <see cref="T:System.Net.Battlefield3.Map"/>.</value>
+        </member>
+        <member name="P:System.Net.Battlefield3.Map.CurrentRound">
+            <summary>
+            Gets the rounds that have been played so far on the <see cref="T:System.Net.Battlefield3.Map"/>.
+            </summary>
+            <value>The current round being played on the <see cref="T:System.Net.Battlefield3.Map"/>, or 0 if it's not being played.</value>
+        </member>
+    </members>
+</doc>

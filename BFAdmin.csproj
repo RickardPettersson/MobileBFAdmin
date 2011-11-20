@@ -13,6 +13,7 @@
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -25,7 +26,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -51,7 +51,7 @@
   <ItemGroup>
     <Reference Include="BF3Rcon, Version=3.2.6.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Vendor\BF3Rcon-dev-5371\BF3Rcon.dll</HintPath>
+      <HintPath>Vendor\BF3Rcon-dev-5738\BF3Rcon.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -69,6 +69,7 @@
   <ItemGroup>
     <Compile Include="Helpers\AdminHelper.cs" />
     <Compile Include="Helpers\Log.cs" />
+    <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Helpers\Webservice.cs" />
     <Compile Include="Helpers\WebserviceRequest.cs" />
     <Compile Include="Helpers\WebserviceResponse.cs" />

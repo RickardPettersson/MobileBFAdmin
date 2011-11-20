@@ -26,9 +26,6 @@ namespace BFAdmin
         // Create a timer object
         private static System.Timers.Timer aTimer;
 
-        // Create a player list object
-        public static List<Player> Playerlist = new List<Player>();
-
         // Create a player command queue
         public static Queue<Dictionary<string, string>> PlayerCommandsQueue = new Queue<Dictionary<string, string>>();
 
@@ -65,7 +62,7 @@ namespace BFAdmin
                 rconClient.PlayerJoining += new EventHandler<PlayerJoiningEventArgs>(rconClient_PlayerJoining);
                 rconClient.PlayerKilled += new EventHandler<PlayerKilledEventArgs>(rconClient_PlayerKilled);
                 rconClient.PlayerLeft += new EventHandler<PlayerEventArgs>(rconClient_PlayerLeft);
-                rconClient.PlayerMoved += new EventHandler<PlayerMovedEventArgs>(rconClient_PlayerMoved);
+                //rconClient.PlayerMoved += new EventHandler<PlayerMovedEventArgs>(rconClient_PlayerMoved);
                 rconClient.PlayerSpawned += new EventHandler<PlayerEventArgs>(rconClient_PlayerSpawned);
                 rconClient.PunkBusterMessage += new EventHandler<PunkBusterMessageEventArgs>(rconClient_PunkBusterMessage);
                 rconClient.RawRead += new EventHandler<RawReadEventArgs>(rconClient_RawRead);
@@ -75,7 +72,7 @@ namespace BFAdmin
 
                 // Setup a timer for every 5 seconds to run the listplayers function that do stuff with the players, like commands etc.
                 aTimer = new System.Timers.Timer(5000);
-                aTimer.Elapsed += new ElapsedEventHandler(ListPlayers);
+                aTimer.Elapsed += new ElapsedEventHandler(DoPlayerCommands);
                 aTimer.Enabled = true;
 
                 // Start the webservice/HTTP Listener to listen on webservice port
@@ -117,10 +114,12 @@ namespace BFAdmin
             Log.Info("PlayerSpawned - Player: " + e.Player);
         }
 
-        static void rconClient_PlayerMoved(object sender, PlayerMovedEventArgs e)
+        /*PlayerMoved been removed as event from changeset 5618 of BF3Rcon
+         * 
+         * static void rconClient_PlayerMoved(object sender, PlayerMovedEventArgs e)
         {
             Log.Info("PlayerMoved - Player: " + e.Player.Name + " - New Team: " + e.NewTeam + " - New Squad: " + e.NewSquad + " - Old Team: " + e.OldTeam + " - Old Squad: " + e.OldSquad);
-        }
+        }*/
 
         static void rconClient_PlayerLeft(object sender, PlayerEventArgs e)
         {
@@ -211,13 +210,10 @@ namespace BFAdmin
             Log.Info("Connected");
         }
 
-        private static void ListPlayers(object source, ElapsedEventArgs e)
+        private static void DoPlayerCommands(object source, ElapsedEventArgs e)
         {
             // Get the player collection from rcon library
             PlayerCollection players = rconClient.Players;
-
-            // Convert pplayer collection to playerlist
-            Playerlist = players.ToList();
 
             // Check if we got any players
             if (players.Count == 0)
