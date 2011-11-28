@@ -250,7 +250,10 @@ namespace BFAdmin
                             switch (command[command.Keys.First()].ToLower())
                             {
                                 case "kick":
-                                    player.Kick();
+                                    player.Kick("Kicked for something...");
+                                    break;
+                                case "kfrs":
+                                    player.Kick("Kicked for reserved slots");
                                     break;
                                 case "permanentban":
                                     player.PermanentBan(BanTargetType.Name);
@@ -261,7 +264,7 @@ namespace BFAdmin
                                     {
                                         seconds = Convert.ToInt32(command["seconds"]);
                                     }
-                                    player.TemporaryBan(BanTargetType.Name, seconds);
+                                    player.TemporaryBan(BanTargetType.Guid, seconds);
                                     break;
                                 case "roundban":
                                     int rounds = 1;
@@ -269,10 +272,22 @@ namespace BFAdmin
                                     {
                                         rounds = Convert.ToInt32(command["rounds"]);
                                     }
-                                    player.RoundBan(rounds, BanTargetType.Name);
+                                    player.RoundBan(rounds, BanTargetType.Guid);
                                     break;
                                 case "kill":
                                     player.Kill();
+                                    break;
+                                case "mv":
+                                    int teamToMoveTo = 1;
+                                    if (command.Keys.Contains("team"))
+                                    {
+                                        teamToMoveTo = Convert.ToInt32(command["team"]);
+                                    }
+
+                                    Player tmp = rconClient.Players.First(p => p.TeamId == teamToMoveTo);
+                                    int squadID = tmp.SquadId;
+
+                                    player.ChangeSquad(teamToMoveTo, squadID);
                                     break;
                             }
                         }

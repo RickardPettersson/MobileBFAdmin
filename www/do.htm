@@ -2,7 +2,7 @@
     <head>
         <title>Battlefield 3 Server Admin</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.css" />
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.css" />
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
         <script type="text/javascript">
             $(document).bind("mobileinit", function () {
@@ -10,7 +10,18 @@
                 //window.setTimeout('location.reload()', 10000);
             });
         </script> 
-        <script type="text/javascript" src="http://code.jquery.com/mobile/1.0rc2/jquery.mobile-1.0rc2.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/mobile/1.0/jquery.mobile-1.0.min.js"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#select-choice-1').change(function () {
+                    document.location = '/command?player=REPLACETHISWITHPLAYERNAME&do=mv&no=' + $('#select-choice-1').val();
+                });
+            });
+
+
+            
+        </script> 
     </head>
     <body>
         <div data-role="page">
@@ -22,10 +33,17 @@
                 <h2>Do with player <span id="playerName">REPLACETHISWITHPLAYERNAME</span></h2>
                 <ul data-role="listview" data-inset="true" data-theme="d">
                 <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=kick">Kick</a></li>
+                <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=kfrs">Kicked for reserved slots</a></li>
                 <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=permanentban">Permanent ban</a></li>
                 <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=roundban">One round ban</a></li>
                 <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=temporaryban">1 minute ban</a></li>
                 <li><a href="/command?player=REPLACETHISWITHPLAYERNAME&do=kill">Kill</a></li>
+                <li data-role="fieldcontain">
+				    <label for="select-choice-1" class="select">Move to another team:</label>
+				    <select name="select-choice-1" id="select-choice-1">
+					    <TEAMLIST>
+				    </select>
+			    </li>
                 </ul>
             </div>
         </div>

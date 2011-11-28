@@ -135,35 +135,49 @@ namespace BFAdmin.Helpers
                     int teamId = 0;
                     bool firstplayer = true;
 
+                    sb.Append("<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"d\">");
+
                     // Loop each player in the player list 
                     foreach (var p in players)
                     {
-                        // Set group Title to team id
-                        string groupTitle = p.TeamId.ToString();
-
-                        // Check if it is a squad
-                        if (groupName.ToLower() == "squad")
+                        // Check if time to show new team title
+                        if ((firstplayer) || (teamId != p.TeamId))
                         {
-                            // Get the squad name instead of team id
-                            groupTitle = Utils.GetSquadName(p.TeamId);
-                        }
+                            // Set group Title to team id
+                            string groupTitle = p.TeamId.ToString();
 
-                        // Check if it is the first player in the loop
-                        if (firstplayer)
-                        {
-                            sb.Append("<h3>" + groupName + " " + groupTitle + "</h3><ul data-role=\"listview\" data-inset=\"true\" data-theme=\"d\">");
-                            teamId = p.TeamId;
-                            firstplayer = false;
-                        }
-                        else if (teamId != p.TeamId)
-                        {
-                            sb.Append("</ul><br/><h3>" + groupName + " " + groupTitle + "</h3>");
-                            sb.Append("<ul data-role=\"listview\" data-inset=\"true\" data-theme=\"d\">");
-                            teamId = p.TeamId;
-                        }
+                            // Check if it is a squad
+                            if (groupName.ToLower() == "squad")
+                            {
+                                // Get the squad name instead of team id
+                                groupTitle = Utils.GetSquadName(p.TeamId);
+                            }
 
+                            int playerCount = players.Count(pl => pl.TeamId == p.TeamId);
+
+                            string teamTitle = groupName + " " + groupTitle;
+
+                            if (groupTitle.ToLower() == "no squad")
+                            {
+                                teamTitle = groupTitle;
+                            }
+
+                            // Check if it is the first player in the loop
+                            if (firstplayer)
+                            {
+                                sb.Append("<li data-role=\"list-divider\">" + teamTitle + " <span class=\"ui-li-count\">" + playerCount + "</span></li>");
+                                teamId = p.TeamId;
+                                firstplayer = false;
+                            }
+                            else if (teamId != p.TeamId)
+                            {
+                                sb.Append("<li data-role=\"list-divider\">" + teamTitle + " <span class=\"ui-li-count\">" + playerCount + "</span></li>");
+                                teamId = p.TeamId;
+                            }
+                        }
+                        
                         // Add item to the list
-                        sb.Append("<li><a href=\"/do?player=" + p.Name + "\">" + p.Score + " - " + p.Name + " - " + p.Kills + "/" + p.Deaths + "</a></li>");
+                        sb.Append("<li><a href=\"/do?player=" + p.Name + "\">" + p.Score + " - " + p.Name + " <span class=\"ui-li-count\">" + p.Kills + "/" + p.Deaths + "</span></a></li>");
                     }
                     sb.Append("</ul>");
                 }
@@ -174,8 +188,69 @@ namespace BFAdmin.Helpers
             }
             else if (new Regex("/do").Match(myRequest.URL).Success)
             {
+                StringBuilder sb = new StringBuilder();
+
+                PlayerCollection playerCollection = Program.rconClient.Players;
+
+                // Check if no players on the server
+                if (playerCollection.Count == 0)
+                {
+                    sb.Append("<option value=\"-2\">ERROR</option>");
+                }
+                else
+                {
+                    var players = from player in playerCollection orderby player.TeamId, player.Score descending select player;
+
+                    int serverSlots = -1;
+
+                    Packet serverInfo = Program.rconClient.SendRequest("serverInfo");
+                    if (serverInfo.Success())
+                    {
+                        serverSlots = Convert.ToInt32(serverInfo.Words[3]);
+                    }
+
+                    int numberOfTeams = 2;
+
+                    MapCollection mapCollextion = Program.rconClient.Maps;
+                    Map currentMap = mapCollextion.CurrentMap;
+
+                    string groupName = "Team";
+                    
+                    if (currentMap.FriendlyMode.ToLower().Contains("squad"))
+                    {
+                        groupName = "Squad";
+                        numberOfTeams = serverSlots / 4;
+                    }
+
+                    
+                    for (int i = 1; i <= numberOfTeams; i++)
+                    {
+                        // Set group Title to team id
+                        string groupTitle = i.ToString();
+
+                        // Check if it is a squad
+                        if (groupName.ToLower() == "squad")
+                        {
+                            // Get the squad name instead of team id
+                            groupTitle = Utils.GetSquadName(i);
+                        }
+
+                        int playerCount = players.Count(pl => pl.TeamId == i);
+
+                        string teamTitle = groupName + " " + groupTitle;
+
+                        if (groupTitle.ToLower() == "no squad")
+                        {
+                            teamTitle = groupTitle;
+                        }
+
+                        sb.Append("<option value=\"" + i + "\">" + teamTitle + "</option>");
+                    }
+                }
+                
+
                 // Get the html file to string and replace the text with the player name
-                answer = File.ReadAllText("www/do.htm").Replace("REPLACETHISWITHPLAYERNAME", myRequest.Data["player"]);
+                answer = File.ReadAllText("www/do.htm").Replace("REPLACETHISWITHPLAYERNAME", myRequest.Data["player"]).Replace("<TEAMLIST>", sb.ToString());
             }
             else if (new Regex("/command").Match(myRequest.URL).Success)
             {
@@ -221,6 +296,20 @@ namespace BFAdmin.Helpers
                         else
                         {
                             command.Add("rounds", "1");
+                        }
+                    }
+
+                    // Check if we got a roundban to do
+                    if (todo.ToLower() == "mv")
+                    {
+                        // Check if we got number of rounds as querystring
+                        if (myRequest.Data.Keys.Contains("no"))
+                        {
+                            command.Add("team", myRequest.Data["no"]);
+                        }
+                        else
+                        {
+                            command.Add("team", "1");
                         }
                     }
 
