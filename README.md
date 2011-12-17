@@ -1,3 +1,5 @@
+# This is a old project that not working well, go to http://www.bfadmin.mobi and use that webservice instead
+
 # Mobile Battlefield Server Interface
 
 The project is a application that you starting on a computer/server that connecting to your Battlefield 3 Server with RCON protocol, then you connecting with your smartphone browser to this application and get a mobile web app to control your server with.
